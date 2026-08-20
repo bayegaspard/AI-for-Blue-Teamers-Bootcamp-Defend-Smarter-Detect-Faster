@@ -50,8 +50,9 @@ def check_ollama():
 def check_wazuh():
     w = WazuhClient(timeout=8)
     try:
-        info = w.health().get("data", {})
-        return True, f"manager {info.get('version', '?')} at {w.api}", None
+        data = w.health().get("data", {})
+        ver = data.get("version") or data.get("api_version") or ""
+        return True, f"authenticated at {w.api}" + (f"  ({ver})" if ver else ""), None
     except WazuhError as e:
         hint = None
         if _wz.WAZUH_PASS == "CHANGE_ME":

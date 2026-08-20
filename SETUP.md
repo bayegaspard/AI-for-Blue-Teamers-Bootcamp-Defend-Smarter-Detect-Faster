@@ -21,6 +21,17 @@ python3 -m pip install -r common/requirements.txt
 > The `ollama_client` and `wazuh_client` use only the Python standard library, so they work
 > even without the pip install. `python-dotenv`, `rich`, and `tabulate` just make output nicer.
 
+### Installing Docker (Ubuntu student VMs)
+
+The dockerized labs (Module 2 targets and attacker, the Module 4 assistant, and the
+offline mock) need Docker Engine plus the Compose plugin. On Ubuntu 22.04 / 24.04:
+```bash
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
+newgrp docker            # apply the docker group now (or log out and back in)
+docker --version && docker compose version
+```
+
 ---
 
 ## 1. Configure `.env`
