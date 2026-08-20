@@ -59,7 +59,7 @@ hardened AI SOC assistant).
   [`docker/wazuh-agent/local_rules.xml`](../docker/wazuh-agent/local_rules.xml).
 - Generate the telemetry live from the attacker container **before class** (or as a
   live demo) - commands are in [`SCENARIO.md` §3](SCENARIO.md). Confirm the alerts
-  appear: `python common/wazuh_client.py --alerts 40 --min-level 10`.
+  appear: `python3 common/wazuh_client.py --alerts 40 --min-level 10`.
 
 ### Path B - Portable / offline (recommended default)
 ```bash
@@ -71,7 +71,7 @@ The evidence is pre-captured in [`datasets/`](../datasets) (including
 
 **Pre-flight checklist (run before students arrive):**
 ```bash
-python common/ollama_client.py --health          # AI backend answers
+python3 common/ollama_client.py --health          # AI backend answers
 curl -s localhost:8080/health                     # assistant is up (Path B)
 python3 module5-capstone/labs/capstone_check.py   # grader runs (will say "no report" - fine)
 ```

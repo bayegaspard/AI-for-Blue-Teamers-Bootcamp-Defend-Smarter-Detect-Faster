@@ -53,7 +53,7 @@ By the end of this module, participants can:
 1. Confirm the `.env` at the repo root has the **real** `WAZUH_PASS` / `WAZUH_INDEXER_PASS` filled in (they ship as `CHANGE_ME`). Ollama needs no secret.
 2. From the repo root, run the environment check and confirm both PASS:
    ```bash
-   python scripts/verify_env.py
+   python3 scripts/verify_env.py
    ```
 3. Bring up the portable stack once so it's warm and image-built, in case the VPN/GPU is flaky during class:
    ```bash
@@ -71,14 +71,14 @@ OLLAMA_HOST=http://10.50.142.235:11434
 WAZUH_API=https://10.50.136.116:55000
 WAZUH_INDEXER=https://10.50.136.116:9200
 ```
-Then `python scripts/verify_env.py` should report two PASS lines.
+Then `python3 scripts/verify_env.py` should report two PASS lines.
 
 **Portable / offline (any laptop, no GPU, no VPN):**
 ```bash
 scripts/lab_up.sh core                       # starts mock-ollama + ai-soc-assistant
 # then edit .env:
 #   OLLAMA_HOST=http://localhost:11435
-python common/ollama_client.py --health      # should list llama3.1:8b
+python3 common/ollama_client.py --health      # should list llama3.1:8b
 ```
 The `mock-ollama` is a deterministic, GPU-free stand-in. It returns **malicious** for brute-force/SQLi-shaped logs and **benign** otherwise, so every AI lab behaves identically to the real GPU. Wazuh has no offline stand-in - on the portable path, do Lab 1.4's dashboard tour as an instructor-led screen-share and let students still run the CLI against the VM if they have API reachability; if not, use the sample alert output in the solutions key.
 
@@ -119,7 +119,7 @@ Timeboxing tip: Labs 1.2 and 1.3 are where the learning is. If you're behind, co
 | `verify_env.py` Ollama = FAIL | Not on VPN / wrong `OLLAMA_HOST` | Switch to portable path: `scripts/lab_up.sh core`, set `OLLAMA_HOST=http://localhost:11435`. |
 | `verify_env.py` Wazuh = FAIL, "auth failed" | `WAZUH_PASS` still `CHANGE_ME` | Paste the real install-time password into `.env`. |
 | Wazuh FAIL, "unreachable" | No route to `10.50.136.116` | Confirm VPN/student-VM networking; Wazuh has no local mock - use instructor screen-share for the tour. |
-| `ModuleNotFoundError: common` | Ran a lab script from inside `labs/` without the boilerplate, or copied a snippet wrong | The provided scripts add the repo root to `sys.path`; run them as-is, e.g. `python module1-foundations/labs/first_ai_triage.py`. |
+| `ModuleNotFoundError: common` | Ran a lab script from inside `labs/` without the boilerplate, or copied a snippet wrong | The provided scripts add the repo root to `sys.path`; run them as-is, e.g. `python3 module1-foundations/labs/first_ai_triage.py`. |
 | First model call "hangs" ~10-30s | Cold GPU load of the 8B model | Normal on the first request. It warms up; subsequent calls are fast. |
 | `python: command not found` | System only has `python3` | Use `python3` (the repo targets 3.10+; it's tested on 3.13). |
 | Model output "looks different from the slides" | Real 8B is non-deterministic | Expected - compare **verdicts**, not wording. Use the mock for a byte-identical demo. |

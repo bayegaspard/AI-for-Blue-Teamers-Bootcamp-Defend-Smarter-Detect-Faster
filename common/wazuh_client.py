@@ -16,10 +16,10 @@ Quick use (library):
         print(a["rule"]["description"])
 
 Quick use (CLI):
-    python common/wazuh_client.py --health
-    python common/wazuh_client.py --agents
-    python common/wazuh_client.py --alerts 20
-    python common/wazuh_client.py --alerts 20 --min-level 7
+    python3 common/wazuh_client.py --health
+    python3 common/wazuh_client.py --agents
+    python3 common/wazuh_client.py --alerts 20
+    python3 common/wazuh_client.py --alerts 20 --min-level 7
 """
 from __future__ import annotations
 
@@ -31,13 +31,31 @@ import sys
 import urllib.request
 import urllib.error
 
-try:
-    from dotenv import load_dotenv  # type: ignore
+def _load_env() -> None:
+    """Load the repo-root .env into os.environ. Uses python-dotenv if present, and
+    otherwise falls back to a tiny built-in parser so the labs work on a bare VM
+    with no pip installs. Existing environment variables always win."""
+    envpath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+    try:
+        from dotenv import load_dotenv  # type: ignore
+        load_dotenv(envpath)
+        return
+    except Exception:  # dotenv not installed: parse .env ourselves
+        pass
+    try:
+        with open(envpath, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                k, v = line.split("=", 1)
+                v = v.strip().strip('"').strip("'")
+                os.environ.setdefault(k.strip(), v)
+    except FileNotFoundError:
+        pass
 
-    _here = os.path.dirname(os.path.abspath(__file__))
-    load_dotenv(os.path.join(os.path.dirname(_here), ".env"))
-except Exception:  # pragma: no cover
-    pass
+
+_load_env()
 
 WAZUH_API = os.environ.get("WAZUH_API", "https://10.50.136.116:55000")
 WAZUH_INDEXER = os.environ.get("WAZUH_INDEXER", "https://10.50.136.116:9200")
@@ -130,6 +148,22 @@ class WazuhClient:
         res = self._indexer_post("/wazuh-alerts-*/_search", query)
         hits = res.get("hits", {}).get("hits", [])
         return [h.get("_source", {}) for h in hits]
+
+    def indexer_health(self) -> dict:
+        """GET the indexer cluster health (proves 9200 is reachable + creds work).
+
+        Used by verify_env. The indexer (port 9200) is only needed for pulling stored
+        alerts (Modules 3 and 5), not for Day 1.
+        """
+        url = f"{self.indexer}/_cluster/health"
+        basic = base64.b64encode(
+            f"{WAZUH_INDEXER_USER}:{WAZUH_INDEXER_PASS}".encode()).decode()
+        req = urllib.request.Request(url, headers={"Authorization": f"Basic {basic}"})
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout, context=_ctx()) as resp:
+                return json.loads(resp.read().decode())
+        except urllib.error.URLError as e:
+            raise WazuhError(f"Wazuh indexer unreachable at {self.indexer}: {e}") from e
 
 
 # ---- CLI -------------------------------------------------------------------

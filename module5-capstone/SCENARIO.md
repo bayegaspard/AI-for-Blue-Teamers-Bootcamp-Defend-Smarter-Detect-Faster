@@ -35,9 +35,9 @@ from your workstation:
 
 ```bash
 # from the repo root, with .env pointed at the cyberlab
-python common/wazuh_client.py --health
-python common/wazuh_client.py --alerts 40                 # everything recent
-python common/wazuh_client.py --alerts 40 --min-level 10  # just the loud stuff
+python3 common/wazuh_client.py --health
+python3 common/wazuh_client.py --alerts 40                 # everything recent
+python3 common/wazuh_client.py --alerts 40 --min-level 10  # just the loud stuff
 ```
 
 The AI assistant runs against the GPU VM (`llama3.1:8b`). Either use the web UI at

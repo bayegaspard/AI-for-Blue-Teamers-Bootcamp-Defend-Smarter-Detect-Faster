@@ -23,7 +23,7 @@ scripts/lab_up.sh core
 
 ```bash
 # Sanity check your AI backend answers at all (either path):
-python common/ollama_client.py --health
+python3 common/ollama_client.py --health
 # Expected: [OK] Ollama reachable at http://...   Models available: llama3.1:8b
 ```
 
@@ -37,7 +37,7 @@ You have overnight telemetry. Find every source that misbehaved and rank it.
 
 **Real cyberlab:**
 ```bash
-python common/wazuh_client.py --alerts 40 --min-level 10
+python3 common/wazuh_client.py --alerts 40 --min-level 10
 ```
 **Expected output** (order/timestamps vary) - you should see high-level alerts like:
 ```
@@ -50,7 +50,7 @@ python common/wazuh_client.py --alerts 40 --min-level 10
 **Portable/offline:** read the captured logs directly and run the Module 2 detector
 against the SSH log:
 ```bash
-python module2-detection/labs/detect_bruteforce.py datasets/auth.log
+python3 module2-detection/labs/detect_bruteforce.py datasets/auth.log
 ```
 **Expected output** (abridged):
 ```
@@ -96,7 +96,7 @@ Now use the AI assistant to summarize each finding fast - **and check its work.*
 
 **Any path (CLI):**
 ```bash
-python module1-foundations/labs/first_ai_triage.py datasets/auth.log
+python3 module1-foundations/labs/first_ai_triage.py datasets/auth.log
 ```
 **Expected output** (wording varies; the verdict should not):
 ```
@@ -177,7 +177,7 @@ Use the report template in
 [`common/prompts/ir_report.md`](../common/prompts/ir_report.md). Paste your evidence
 block where it says `{{EVIDENCE_BLOCK}}` and send it to the assistant, e.g.:
 ```bash
-python common/ollama_client.py --system "You are an incident report writer. Use ONLY the provided evidence; do not overstate impact." \
+python3 common/ollama_client.py --system "You are an incident report writer. Use ONLY the provided evidence; do not overstate impact." \
   "Draft an incident report with sections Executive Summary, Timeline, Technical Details, Impact, Recommendations. EVIDENCE: <paste your evidence block here>"
 ```
 **Expected:** a draft with all five sections. Treat it as a *first draft* - you will

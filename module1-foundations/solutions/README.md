@@ -10,7 +10,7 @@
 
 Run any of these with:
 ```bash
-python module1-foundations/labs/first_ai_triage.py <dataset>
+python3 module1-foundations/labs/first_ai_triage.py <dataset>
 ```
 
 ### [`datasets/auth.log`](../../datasets/auth.log) - Lab 1.3 main

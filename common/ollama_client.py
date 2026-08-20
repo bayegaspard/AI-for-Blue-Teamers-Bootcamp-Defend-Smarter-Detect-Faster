@@ -12,9 +12,9 @@ Quick use (library):
     print(ai.generate("Summarize this SSH log line: <line>"))
 
 Quick use (CLI):
-    python common/ollama_client.py "Explain what a brute-force attack looks like in auth.log"
-    echo "<log line>" | python common/ollama_client.py --stdin --system "You are a SOC analyst."
-    python common/ollama_client.py --health
+    python3 common/ollama_client.py "Explain what a brute-force attack looks like in auth.log"
+    echo "<log line>" | python3 common/ollama_client.py --stdin --system "You are a SOC analyst."
+    python3 common/ollama_client.py --health
 """
 from __future__ import annotations
 
@@ -25,14 +25,31 @@ import urllib.request
 import urllib.error
 
 # --- optional niceties (never required) -------------------------------------
-try:
-    from dotenv import load_dotenv  # type: ignore
+def _load_env() -> None:
+    """Load the repo-root .env into os.environ. Uses python-dotenv if present, and
+    otherwise falls back to a tiny built-in parser so the labs work on a bare VM
+    with no pip installs. Existing environment variables always win."""
+    envpath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+    try:
+        from dotenv import load_dotenv  # type: ignore
+        load_dotenv(envpath)
+        return
+    except Exception:  # dotenv not installed: parse .env ourselves
+        pass
+    try:
+        with open(envpath, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                k, v = line.split("=", 1)
+                v = v.strip().strip('"').strip("'")
+                os.environ.setdefault(k.strip(), v)
+    except FileNotFoundError:
+        pass
 
-    # Load .env from the repo root regardless of where the script is run.
-    _here = os.path.dirname(os.path.abspath(__file__))
-    load_dotenv(os.path.join(os.path.dirname(_here), ".env"))
-except Exception:  # pragma: no cover - dotenv is optional
-    pass
+
+_load_env()
 
 DEFAULT_HOST = os.environ.get("OLLAMA_HOST", "http://10.50.142.235:11434")
 DEFAULT_MODEL = os.environ.get("OLLAMA_MODEL", "llama3.1:8b")

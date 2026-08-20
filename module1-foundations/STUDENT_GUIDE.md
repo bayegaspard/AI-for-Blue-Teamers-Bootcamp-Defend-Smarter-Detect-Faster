@@ -28,7 +28,7 @@ cd path/to/repo      # the repo root
 ### Step 1 - Run the all-in-one check
 
 ```bash
-python scripts/verify_env.py
+python3 scripts/verify_env.py
 ```
 
 **Expected output (real cyberlab, both healthy):**
@@ -48,8 +48,8 @@ If you see a `[FAIL]`, don't panic - jump to **Step 4 (portable fallback)** belo
 ### Step 2 - Check each service individually
 
 ```bash
-python common/ollama_client.py --health
-python common/wazuh_client.py --health
+python3 common/ollama_client.py --health
+python3 common/wazuh_client.py --health
 ```
 
 **Expected output:**
@@ -102,7 +102,7 @@ OLLAMA_HOST=http://localhost:11435
 ```
 Re-check just Ollama (the mock has no Wazuh - that's fine for now):
 ```bash
-python common/ollama_client.py --health
+python3 common/ollama_client.py --health
 ```
 **Expected output:**
 ```
@@ -121,7 +121,7 @@ python common/ollama_client.py --health
 ### Step 1 - Ask a plain security question
 
 ```bash
-python common/ollama_client.py "Explain what SSH brute force looks like in auth.log. Keep it to 4 bullet points."
+python3 common/ollama_client.py "Explain what SSH brute force looks like in auth.log. Keep it to 4 bullet points."
 ```
 
 **Expected output (wording varies on the real model; shape is stable):**
@@ -139,7 +139,7 @@ python common/ollama_client.py "Explain what SSH brute force looks like in auth.
 The tool sends a hidden **system prompt** that shapes every answer. The default is a SOC analyst persona. Prove it changes behavior by overriding it:
 
 ```bash
-python common/ollama_client.py --system "You are a pirate. Answer in pirate speak." "What is an SSH brute force attack?"
+python3 common/ollama_client.py --system "You are a pirate. Answer in pirate speak." "What is an SSH brute force attack?"
 ```
 You'll get the same *facts* wrapped in pirate voice. The **system prompt is a real control** - remember that; it's the whole story of Modules 3 and 4.
 
@@ -193,7 +193,7 @@ Read it like an analyst: a burst of failures from `10.10.10.5` at 03:11 … then
 The `log_triage` prompt (see [`common/prompts/log_triage.md`](../common/prompts/log_triage.md)) asks for a fixed 5-field answer. Quick version from the CLI:
 
 ```bash
-cat datasets/auth.log | python common/ollama_client.py --stdin \
+cat datasets/auth.log | python3 common/ollama_client.py --stdin \
   --system "You are a senior SOC analyst assistant. Cite the exact log lines that justify your verdict." \
   "Analyze this log block and return SUMMARY, VERDICT (benign|suspicious|malicious), CONFIDENCE, INDICATORS, RECOMMENDED ACTION."
 ```
@@ -204,7 +204,7 @@ cat datasets/auth.log | python common/ollama_client.py --stdin \
 Real automation lives in a script, not a one-off pipe. Run the provided starter - [`labs/first_ai_triage.py`](./labs/first_ai_triage.py):
 
 ```bash
-python module1-foundations/labs/first_ai_triage.py
+python3 module1-foundations/labs/first_ai_triage.py
 ```
 
 **Expected output (mock is exact; real 8B says the same thing in its own words):**
@@ -232,7 +232,7 @@ Notice **RECOMMENDED ACTION** literally tells you to *"confirm no successful log
 
 The script takes any file path:
 ```bash
-python module1-foundations/labs/first_ai_triage.py datasets/access.log
+python3 module1-foundations/labs/first_ai_triage.py datasets/access.log
 ```
 Try it and compare the verdict to `auth.log`.
 
@@ -268,7 +268,7 @@ Find our brute force: filter Security Events for the source IP `10.10.10.5` or r
 You don't need the browser to read alerts - the shared client queries the indexer directly:
 
 ```bash
-python common/wazuh_client.py --alerts 10
+python3 common/wazuh_client.py --alerts 10
 ```
 
 **Expected output (representative - your live alerts will differ):**
@@ -286,11 +286,11 @@ Each line is `[L<level>] <timestamp>  <rule description>`. That `L10` line is th
 Analysts don't read everything. Show only medium-and-above (level ≥ 7):
 
 ```bash
-python common/wazuh_client.py --alerts 20 --min-level 7
+python3 common/wazuh_client.py --alerts 20 --min-level 7
 ```
 And list the agents (the machines being watched):
 ```bash
-python common/wazuh_client.py --agents
+python3 common/wazuh_client.py --agents
 ```
 **Expected output (representative):**
 ```
@@ -326,7 +326,7 @@ The AI called `auth.log` a "brute-force attempt." But something worse happened. 
 ### Challenge 2 - Triage a different log
 Run the starter script on the poisoned dataset:
 ```bash
-python module1-foundations/labs/first_ai_triage.py datasets/poisoned.log
+python3 module1-foundations/labs/first_ai_triage.py datasets/poisoned.log
 ```
 - What VERDICT do you get, and does it convince you?
 - Open [`datasets/poisoned.log`](../datasets/poisoned.log) and read it yourself. Is there anything in the *log text* that seems to be "talking to" the AI rather than describing an event? (You don't need to solve it - just notice it. This is the seed of Module 4.)
@@ -346,14 +346,14 @@ SYSTEM="You are a beginner IT helpdesk agent." module1-foundations/labs/ask_ai.s
 
 | I want to… | Command |
 | --- | --- |
-| Check everything | `python scripts/verify_env.py` |
-| Check Ollama only | `python common/ollama_client.py --health` |
-| Check Wazuh only | `python common/wazuh_client.py --health` |
+| Check everything | `python3 scripts/verify_env.py` |
+| Check Ollama only | `python3 common/ollama_client.py --health` |
+| Check Wazuh only | `python3 common/wazuh_client.py --health` |
 | Ask the model | `module1-foundations/labs/ask_ai.sh "your question"` |
 | Ask + stream | `module1-foundations/labs/ask_ai.sh --stream "your question"` |
-| Triage the sample log | `python module1-foundations/labs/first_ai_triage.py` |
-| Triage any log | `python module1-foundations/labs/first_ai_triage.py path/to/file.log` |
-| Read recent alerts | `python common/wazuh_client.py --alerts 10` |
-| Read high-severity alerts | `python common/wazuh_client.py --alerts 20 --min-level 7` |
-| List agents | `python common/wazuh_client.py --agents` |
+| Triage the sample log | `python3 module1-foundations/labs/first_ai_triage.py` |
+| Triage any log | `python3 module1-foundations/labs/first_ai_triage.py path/to/file.log` |
+| Read recent alerts | `python3 common/wazuh_client.py --alerts 10` |
+| Read high-severity alerts | `python3 common/wazuh_client.py --alerts 20 --min-level 7` |
+| List agents | `python3 common/wazuh_client.py --agents` |
 | Start the offline stack | `scripts/lab_up.sh core` (then set `OLLAMA_HOST=http://localhost:11435`) |

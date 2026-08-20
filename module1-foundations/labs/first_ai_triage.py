@@ -18,8 +18,8 @@ client), this SAME script runs unchanged against either backend:
   * Portable/offline-> OLLAMA_HOST=http://localhost:11435       (mock-ollama container)
 
 Run it:
-    python module1-foundations/labs/first_ai_triage.py
-    python module1-foundations/labs/first_ai_triage.py datasets/poisoned.log
+    python3 module1-foundations/labs/first_ai_triage.py
+    python3 module1-foundations/labs/first_ai_triage.py datasets/poisoned.log
 """
 from __future__ import annotations
 
