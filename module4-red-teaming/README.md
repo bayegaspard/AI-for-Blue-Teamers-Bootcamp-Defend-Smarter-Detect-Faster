@@ -71,7 +71,7 @@ model. Indirect is the scary one and it is the headline of Lab 4.3.
 | Time | Segment | What happens |
 | ---: | --- | --- |
 | 0:00-0:12 | **Intro & ethics** | The one idea above; authorization/ethics framing; OWASP LLM Top 10 primer; the day's arc (attack → then defend the *same* target) |
-| 0:12-0:20 | **Lab setup** | `scripts/lab_up.sh core`; everyone reaches http://localhost:8080; sanity-triage alert #1 |
+| 0:12-0:20 | **Lab setup** | `python3 scripts/verify_env.py`; `inject.py --list`; dry-run the benign payload |
 | 0:20-0:38 | **Lab 4.1 - Direct injection** | Flip a real malicious verdict to `benign`; read the *shown prompt* to see *why* |
 | 0:38-0:52 | **Lab 4.2 - Extraction & jailbreak** | Leak the system prompt (LLM07); 5-min jailbreak concept |
 | 0:52-0:58 | **Break** | - |
@@ -88,32 +88,33 @@ the safe things to demo-only rather than have everyone run.
 ## Prerequisites
 
 **For students**
-- Modules 1-3 (they've already used [`common/ollama_client.py`](../common/ollama_client.py) and triaged alerts with the assistant).
-- Comfortable with a terminal, `curl`, and a browser. No ML background required.
+- Modules 1-3 (they have already used [`common/ollama_client.py`](../common/ollama_client.py) and triaged alerts).
+- Comfortable with a terminal. No ML background required.
 
-**Environment (either path works - the labs give both):**
-- **Real cyberlab:** GPU VM Ollama `llama3.1:8b` at `http://10.50.142.235:11434`; Wazuh 4.14 VM with [`docker/wazuh-agent/local_rules.xml`](../docker/wazuh-agent/local_rules.xml) installed.
-- **Portable / offline:** the Docker stack on any laptop. `core` profile brings up the deterministic `mock-ollama` + the `ai-soc-assistant`; no GPU, no VPN.
+**Environment:** the student path is Docker-free and runs directly against the shared GPU
+model. The tool [`labs/inject.py`](labs/inject.py) builds the vulnerable/hardened prompts
+(logic in [`common/soc_assistant.py`](../common/soc_assistant.py)) and calls Ollama at
+`http://10.50.142.235:11434` (from `.env`). The blue-team half of Lab 4.4 uses the Wazuh
+VM with [`docker/wazuh-agent/local_rules.xml`](../docker/wazuh-agent/local_rules.xml) loaded.
 
-**Why the mock matters for *you*:** [`docker/mock-ollama/app.py`](../docker/mock-ollama/app.py)
-is a *deterministic teaching model*. Its susceptibility to injection is rule-based,
-so the attack **and** the defense land reliably every run, in every classroom,
-regardless of GPU or model randomness. On the real 8B model the same attacks usually
-also work - the mock just guarantees the lesson doesn't flop live.
+**Determinism note for you:** the real 8B model is nondeterministic, so the exact wording
+varies and an attack may occasionally not land; the pattern holds (vulnerable is
+hijackable, hardened resists). If you want a guaranteed-deterministic demo, the optional
+Docker `mock-ollama` gives identical output every run.
 
 ---
 
 ## Setup (do this before class)
 
 ```bash
-# From the repo root
-scripts/lab_up.sh core          # mock-ollama + ai-soc-assistant on :8080
-curl -s http://localhost:8080/health          # {"status":"ok",...}
-
-# For the Lab 4.3 attacker-container half, also bring up:
-scripts/lab_up.sh core targets attack
-docker exec -it soclab-attacker-1 bash         # attacker shell
+# From the repo root - no Docker needed
+python3 scripts/verify_env.py                         # Ollama must be green
+python3 module4-red-teaming/labs/inject.py --list     # 8 payloads ready
+python3 module4-red-teaming/labs/inject.py --payload verdict-flip --mode vulnerable   # dry run
 ```
+
+Optional (at home, requires Docker): the web assistant and attacker toolbox via
+`scripts/lab_up.sh core targets attack`; target the web UI with `inject.py --via-assistant http://localhost:8080`.
 
 Smoke-test the whole attack/defense arc in ~5 seconds with the lab driver:
 
@@ -206,7 +207,7 @@ panel is where the lesson lives.
 | --- | --- | --- |
 | [`README.md`](README.md) | Instructor | This guide |
 | [`STUDENT_GUIDE.md`](STUDENT_GUIDE.md) | Student | Copy-paste labs 4.1-4.5 with expected output, checkpoints, challenges |
-| [`labs/inject.py`](labs/inject.py) | Student | Driver: send a payload to `/api/triage`, pretty-print system/user/response/warnings |
+| [`labs/inject.py`](labs/inject.py) | Student | Driver: run a payload directly against the GPU model (or `--via-assistant`), print system/user/response/assessment |
 | [`labs/payloads.md`](labs/payloads.md) | Both | Catalog: each payload, its effect, the defense that stops it |
 | [`solutions/README.md`](solutions/README.md) | Instructor | Answer key: before/after outputs, why hardened resists, detection mapping, challenge answers |
 

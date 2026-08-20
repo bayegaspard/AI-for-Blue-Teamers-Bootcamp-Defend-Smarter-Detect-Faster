@@ -71,8 +71,8 @@ The evidence is pre-captured in [`datasets/`](../datasets) (including
 
 **Pre-flight checklist (run before students arrive):**
 ```bash
-python3 common/ollama_client.py --health          # AI backend answers
-curl -s localhost:8080/health                     # assistant is up (Path B)
+python3 scripts/verify_env.py                     # Ollama + Wazuh reachable
+python3 module4-red-teaming/labs/inject.py --list # injection tool ready (direct, no Docker)
 python3 module5-capstone/labs/capstone_check.py   # grader runs (will say "no report" - fine)
 ```
 The mock-ollama is **deterministic** (see [`docker/mock-ollama/app.py`](../docker/mock-ollama/app.py)):
@@ -110,10 +110,10 @@ adversarial catch is the graded core.
   line 9 is an `Accepted password for admin from 10.10.10.5` *after* the failures -
   the brute force worked. Students who only report "6 failed logins" understated the
   impact. `detect_bruteforce.py` surfaces it for them.
-- **Common stumbles:** wrong `OLLAMA_HOST` (offline students must use
-  `:11435`, not `:11434`); shell-quoting the curl JSON (offer the web UI at
-  `localhost:8080` as an easier alternative); saving the report outside
-  `submissions/` (the grader defaults to newest there).
+- **Common stumbles:** wrong `OLLAMA_HOST` (should be the GPU VM
+  `http://10.50.142.235:11434`; offline students use `:11435`); saving the report
+  outside `submissions/` (the grader defaults to newest there). The AI tools run
+  directly against the model, so there is no web server to quote JSON against.
 - **Path-agnostic:** every worksheet task has both a cyberlab and an offline command;
   students on either path reach the same findings.
 

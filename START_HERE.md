@@ -124,11 +124,15 @@ instructors use the `README`.
 - Running the whole week as an instructor: **[INSTRUCTOR_GUIDE.md](INSTRUCTOR_GUIDE.md)**.
 - Stop the lab: `scripts/lab_down.sh`   ·   Reset everything: `scripts/teardown.sh`
 
-## Handy commands
+## Handy commands (the student path, no Docker)
 
 | Do this | Command |
 |---------|---------|
-| Prove the AI pipeline works (no GPU) | `bash scripts/smoke_test.sh` |
-| Start the AI assistant | `scripts/lab_up.sh core` then open http://localhost:8080 |
-| Start targets + attacker (Day 2, 4, 5) | `scripts/lab_up.sh core targets attack` |
-| Open a shell in the attacker box | `docker exec -it soclab-attacker-1 bash` |
+| Check the two shared boxes | `python3 scripts/verify_env.py` |
+| First AI log triage (Module 1) | `python3 module1-foundations/labs/first_ai_triage.py datasets/auth.log` |
+| Pull live Wazuh alerts (Module 2) | `python3 common/wazuh_client.py --alerts 20 --min-level 5` |
+| Run a prompt-injection test (Module 4) | `python3 module4-red-teaming/labs/inject.py --payload verdict-flip --mode vulnerable` |
+
+Optional at-home extras (require Docker): `bash scripts/smoke_test.sh` (offline proof),
+`scripts/lab_up.sh core targets attack` (your own victims + attacker), and the web
+assistant at http://localhost:8080.

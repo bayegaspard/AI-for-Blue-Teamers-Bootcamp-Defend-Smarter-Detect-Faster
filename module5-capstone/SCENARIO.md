@@ -40,8 +40,9 @@ python3 common/wazuh_client.py --alerts 40                 # everything recent
 python3 common/wazuh_client.py --alerts 40 --min-level 10  # just the loud stuff
 ```
 
-The AI assistant runs against the GPU VM (`llama3.1:8b`). Either use the web UI at
-<http://localhost:8080> or the shared client from Module 1.
+The AI runs against the GPU VM (`llama3.1:8b`) directly, no Docker: use the shared
+client from Module 1 (`first_ai_triage.py`, `ask_ai.sh`) and the Module 4 tool
+(`inject.py --custom`).
 
 ### Path B - Portable / offline (Docker + captured logs)
 

@@ -32,55 +32,42 @@ Wazuh SIEM) **and** on any laptop with just Docker - no GPU or VPN required.
 
 ---
 
-## Two ways to run every lab
+## How students run the labs
 
-Every lab works in **both** environments, selected by a single `.env` file - no code changes.
-
-**A) Real cyberlab (the delivery target)**
+Students use the two shared cyberlab boxes over the network. They do not SSH into them;
+they only reach the model and the SIEM:
 - Ollama `llama3.1:8b` on the GPU VM `10.50.142.235:11434`
-- Wazuh 4.14 on `10.50.136.116`
-- Students connect from their student VMs.
+- Wazuh 4.14 on `10.50.136.116` (dashboard 443, API 55000, indexer 9200)
 
-**B) Portable / offline (any laptop with Docker)**
-- A `mock-ollama` container stands in for the GPU (deterministic, so demos always land).
-- Dockerized victims + attacker generate real attack telemetry.
-- Great for prep, for students without VPN, and for you to dry-run the whole week.
+The whole student path is **Python-only, no Docker**. Every AI and SIEM interaction is
+selected by a single `.env` file that already points at these two IPs.
+
+Docker is **optional**, for two extras: running your own attackable stack at home
+(victims, attacker, the web assistant) and the fully offline mock. See SETUP.md.
 
 ---
 
-## 60-second quickstart (portable path)
+## Student quickstart (the two shared boxes, no Docker)
 
 ```bash
-# 0. From the repo root
+# From the repo root
 cp .env.example .env
+# Set WAZUH_PASS/WAZUH_INDEXER_PASS (run scripts/get_wazuh_creds.sh on the Wazuh VM).
+# OLLAMA_HOST/WAZUH_API already point at the two VMs.
 
-# 1. Prove the whole AI Blue/Red pipeline works - no GPU, no Wazuh needed
-bash scripts/smoke_test.sh
-#    -> 4/4 PASS: detection works, prompt injection works, the hardened defense holds
-
-# 2. Bring up the interactive AI SOC assistant
-scripts/lab_up.sh core
-open http://localhost:8080        # (Linux: xdg-open) - try VULNERABLE vs HARDENED mode
-
-# 3. Bring up the attackable targets + attacker toolbox (Module 2 & 4)
-scripts/lab_up.sh core targets attack
-docker exec -it soclab-attacker-1 bash
-#   inside: /opt/attacks/attack_web_sqli.sh victim-web 8081
-
-# 4. Tear down when done
-scripts/lab_down.sh      # stop     (or scripts/teardown.sh to also remove images/volumes)
+python3 scripts/verify_env.py     # Ollama + Wazuh should be green
 ```
 
-## Quickstart (real cyberlab path)
+Then start at [START_HERE.md](START_HERE.md) and
+[module1-foundations/STUDENT_GUIDE.md](module1-foundations/STUDENT_GUIDE.md).
+
+## Optional: at-home / offline (requires Docker)
 
 ```bash
-cp .env.example .env
-# Edit .env: set WAZUH_PASS (and OLLAMA_HOST/WAZUH_API already point at the VMs)
-python3 -m pip install -r common/requirements.txt   # or just rely on stdlib clients
-python3 scripts/verify_env.py                        # checks Ollama + Wazuh are reachable
+bash scripts/smoke_test.sh        # proves the AI pipeline with no GPU/VPN (4/4 PASS)
+scripts/lab_up.sh core            # the local mock + web assistant
+scripts/lab_up.sh core targets attack   # your own victims + attacker toolbox
 ```
-
-Then start at [module1-foundations/STUDENT_GUIDE.md](module1-foundations/STUDENT_GUIDE.md).
 
 ---
 
