@@ -12,6 +12,12 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+if ! command -v docker >/dev/null 2>&1; then
+  echo "[!] Docker is not installed. This offline proof needs Docker."
+  echo "    Install (Ubuntu): curl -fsSL https://get.docker.com | sudo sh && sudo usermod -aG docker \$USER && newgrp docker"
+  exit 1
+fi
+
 # Use dedicated high ports so the test never clashes with a real local Ollama (11434)
 # or another app on 8080. Shell env overrides the .env values for the compose run.
 export MOCK_OLLAMA_PORT="${MOCK_OLLAMA_PORT:-21434}"
