@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-08-10T03:11:41.812+0000",
+  "rule": {
+    "level": 10,
+    "description": "sshd: Multiple authentication failures followed by a successful login (possible brute force).",
+    "id": "5720",
+    "firedtimes": 8,
+    "mail": false,
+    "groups": ["syslog", "sshd", "authentication_failures", "authentication_success"],
+    "mitre": {
+      "id": ["T1110", "T1110.001"],
+      "tactic": ["Credential Access"],
+      "technique": ["Brute Force", "Password Guessing"]
+    }
+  },
+  "agent": {
+    "id": "003",
+    "name": "web01",
+    "ip": "10.20.30.5"
+  },
+  "manager": {
+    "name": "wazuh-manager"
+  },
+  "id": "1691637101.204587",
+  "decoder": {
+    "name": "sshd"
+  },
+  "data": {
+    "srcip": "10.10.10.5",
+    "srcport": "51200",
+    "dstuser": "admin"
+  },
+  "location": "/var/log/auth.log",
+  "full_log": "Aug 10 03:11:02 web01 sshd[2001]: Failed password for invalid user admin from 10.10.10.5 port 51122 ssh2\nAug 10 03:11:03 web01 sshd[2003]: Failed password for invalid user admin from 10.10.10.5 port 51124 ssh2\nAug 10 03:11:04 web01 sshd[2005]: Failed password for root from 10.10.10.5 port 51126 ssh2\nAug 10 03:11:06 web01 sshd[2009]: Failed password for invalid user oracle from 10.10.10.5 port 51130 ssh2\nAug 10 03:11:41 web01 sshd[2101]: Accepted password for admin from 10.10.10.5 port 51200 ssh2"
+}

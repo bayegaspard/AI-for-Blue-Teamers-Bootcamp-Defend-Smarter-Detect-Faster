@@ -1,0 +1,7 @@
+indicator,type,description,severity
+10.10.10.5,ip,Known SSH brute-force source (internal threat feed),high
+10.10.10.7,ip,Automated SQLi scanner (sqlmap) observed,high
+10.10.10.11,ip,Credential stuffing infrastructure,medium
+198.51.100.23,ip,C2 beacon endpoint (sample TI),critical
+evil-update[.]com,domain,Malware distribution (sample TI),critical
+d41d8cd98f00b204e9800998ecf8427e,md5,Test/empty-file hash (benign example),low

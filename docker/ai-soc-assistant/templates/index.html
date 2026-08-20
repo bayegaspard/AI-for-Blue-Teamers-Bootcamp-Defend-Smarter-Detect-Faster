@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI SOC Assistant — Bootcamp Lab</title>
+  <style>
+    :root { --bg:#0f1117; --card:#1a1d27; --ink:#e6e8ef; --muted:#9aa3b2;
+            --red:#ff5a5f; --green:#28c76f; --accent:#6c8cff; --line:#2a2f3d; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:15px/1.5 system-ui,Segoe UI,Roboto,sans-serif;
+           background:var(--bg); color:var(--ink); }
+    header { padding:16px 24px; border-bottom:1px solid var(--line);
+             display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+    h1 { font-size:18px; margin:0; }
+    .badge { padding:4px 10px; border-radius:999px; font-weight:700; font-size:12px; letter-spacing:.5px; }
+    .vuln { background:rgba(255,90,95,.15); color:var(--red); border:1px solid var(--red); }
+    .hard { background:rgba(40,199,111,.15); color:var(--green); border:1px solid var(--green); }
+    .meta { color:var(--muted); font-size:12px; margin-left:auto; }
+    main { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px; padding:24px; }
+    @media (max-width:900px){ main{ grid-template-columns:1fr; } }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+    .card h2 { font-size:14px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin:0 0 12px; }
+    .alert { border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin-bottom:10px; }
+    .alert .src { font-size:12px; color:var(--accent); }
+    .alert pre { white-space:pre-wrap; word-break:break-word; font-size:12px; color:var(--muted); margin:6px 0; }
+    button, .btn { background:var(--accent); color:#fff; border:0; padding:8px 12px; border-radius:8px;
+                   cursor:pointer; font-weight:600; font-size:13px; }
+    button.ghost { background:transparent; border:1px solid var(--line); color:var(--ink); }
+    textarea { width:100%; min-height:120px; background:#0c0e15; color:var(--ink); border:1px solid var(--line);
+               border-radius:8px; padding:10px; font-family:ui-monospace,Menlo,monospace; font-size:12px; }
+    pre.block { white-space:pre-wrap; word-break:break-word; background:#0c0e15; border:1px solid var(--line);
+                border-radius:8px; padding:12px; font-size:12px; }
+    .label { font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin:12px 0 4px; }
+    .warn { color:var(--red); font-size:13px; margin-top:8px; }
+    a { color:var(--accent); }
+    form.inline { display:inline; }
+    .toggle a { padding:6px 12px; border:1px solid var(--line); border-radius:8px; text-decoration:none; }
+    .toggle a.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🛡️ AI SOC Assistant</h1>
+    {% if mode == 'hardened' %}
+      <span class="badge hard">MODE: HARDENED</span>
+    {% else %}
+      <span class="badge vuln">MODE: VULNERABLE</span>
+    {% endif %}
+    <span class="toggle">
+      <a href="/?mode=vulnerable" class="{{ 'active' if mode!='hardened' }}">vulnerable</a>
+      <a href="/?mode=hardened" class="{{ 'active' if mode=='hardened' }}">hardened</a>
+    </span>
+    <span class="meta">model: {{ model }} @ {{ ollama_host }}</span>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Alert queue</h2>
+      {% for a in alerts %}
+      <div class="alert">
+        <div class="src">#{{ a.id }} · {{ a.source }}</div>
+        <div>{{ a.title }}</div>
+        <pre>{{ a.raw }}</pre>
+        <form class="inline" method="post" action="/triage">
+          <input type="hidden" name="alert_id" value="{{ a.id }}">
+          <input type="hidden" name="mode" value="{{ mode }}">
+          <button type="submit">Triage with AI</button>
+        </form>
+      </div>
+      {% endfor %}
+
+      <h2 style="margin-top:18px">Paste your own log / payload</h2>
+      <form method="post" action="/triage">
+        <input type="hidden" name="mode" value="{{ mode }}">
+        <textarea name="log" placeholder="Paste a log line or an attack payload here...">{{ submitted_log or '' }}</textarea>
+        <div style="margin-top:8px"><button type="submit">Triage this</button></div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Triage result</h2>
+      {% if result %}
+        <div class="label">System prompt sent to the model</div>
+        <pre class="block">{{ result.system }}</pre>
+        <div class="label">User prompt sent to the model (look how the log is placed!)</div>
+        <pre class="block">{{ result.user }}</pre>
+        <div class="label">Model response</div>
+        <pre class="block">{{ result.response }}</pre>
+        {% for w in result.warnings %}
+          <div class="warn">⚠️ {{ w }}</div>
+        {% endfor %}
+      {% else %}
+        <p style="color:var(--muted)">Pick an alert or paste a log, then click <b>Triage</b>.
+        The exact prompt sent to the model is shown here — in <b>vulnerable</b> mode the raw log is
+        glued straight into the instruction; in <b>hardened</b> mode it is isolated inside data markers.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>
