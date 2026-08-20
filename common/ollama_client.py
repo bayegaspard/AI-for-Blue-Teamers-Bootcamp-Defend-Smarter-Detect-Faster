@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ollama_client.py — thin, dependency-light client for the lab's Ollama server.
+ollama_client.py - thin, dependency-light client for the lab's Ollama server.
 
 Used by every AI-assisted lab (Modules 1, 3, 4, 5). It talks to whatever
 OLLAMA_HOST points at in your .env: the real GPU VM (10.50.142.235:11434) or

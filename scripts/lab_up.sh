@@ -5,7 +5,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
-[ -f .env ] || { echo "[*] No .env found — creating from .env.example"; cp .env.example .env; }
+[ -f .env ] || { echo "[*] No .env found - creating from .env.example"; cp .env.example .env; }
 
 PROFILES=("${@:-core}")
 ARGS=()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-victim-web — an INTENTIONALLY VULNERABLE login app for the detection lab (Module 2).
+victim-web - an INTENTIONALLY VULNERABLE login app for the detection lab (Module 2).
 
 DO NOT deploy this anywhere real. It exists so students can generate realistic attack
 telemetry (brute force + SQL injection) and then detect it.
@@ -45,7 +45,7 @@ def log_line(msg: str):
 
 
 PAGE = """<!doctype html><title>Corp Portal</title>
-<h2>Corporate Portal — Sign in</h2>
+<h2>Corporate Portal - Sign in</h2>
 <form method=post action=/login>
   <input name=username placeholder=username> <input name=password type=password placeholder=password>
   <button>Login</button>

@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-detect_web_attacks.py — Module 2 (Applied Detection) web-attack signature scanner.
+detect_web_attacks.py - Module 2 (Applied Detection) web-attack signature scanner.
 
 WHAT IT DOES
 ------------
 Reads an HTTP access log (default: datasets/access.log) and flags each request
-that matches a known attack SIGNATURE — SQL injection, path traversal, obvious
+that matches a known attack SIGNATURE - SQL injection, path traversal, obvious
 scanner tooling, or reflected-XSS probes. For every hit it prints the source IP,
 the offending request, and *which* signature(s) matched, so you can see exactly
 why the line was caught.
 
 This is the "signature-based detection" half of the module (the brute-force
 detector is the "behavioral / rate-based" half). Signatures are cheap and precise
-for attacks with a fixed syntax — the same patterns power Wazuh rule 100101
+for attacks with a fixed syntax - the same patterns power Wazuh rule 100101
 (SQLi) and 100100 (path traversal) in docker/wazuh-agent/local_rules.xml.
 
 USAGE
@@ -20,7 +20,7 @@ USAGE
     python3 detect_web_attacks.py                 # scans datasets/access.log
     python3 detect_web_attacks.py /path/to/other.log
 
-Standard library only — no installs required.
+Standard library only - no installs required.
 """
 from __future__ import annotations
 

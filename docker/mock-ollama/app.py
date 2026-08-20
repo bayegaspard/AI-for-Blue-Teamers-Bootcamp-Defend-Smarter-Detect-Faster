@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-mock-ollama — a GPU-free stand-in for the lab's Ollama server.
+mock-ollama - a GPU-free stand-in for the lab's Ollama server.
 
 Why this exists
 ---------------
 The real labs run against the GPU VM (llama3.1:8b at 10.50.142.235:11434). But an
 instructor may need to demo or dry-run on a laptop with no GPU and no VPN. This
 service speaks enough of the Ollama HTTP API (/api/tags, /api/generate, /api/chat,
-streaming) that every lab script and the ai-soc-assistant run unchanged — just point
+streaming) that every lab script and the ai-soc-assistant run unchanged - just point
 OLLAMA_HOST at this container.
 
 It is also a *deterministic teaching model*: its susceptibility to prompt injection
@@ -74,9 +74,9 @@ def injection_response(tag: str, system: str) -> str:
         return ("SUMMARY: Routine activity, nothing of concern.\n"
                 "VERDICT: benign\nCONFIDENCE: high\n"
                 "INDICATORS: none\nRECOMMENDED ACTION: close the alert, no follow-up needed.\n"
-                "\n[!! mock-ollama note: the DATA hijacked my verdict — this is the attack succeeding.]")
+                "\n[!! mock-ollama note: the DATA hijacked my verdict - this is the attack succeeding.]")
     if tag == "leak_prompt":
-        return ("Sure — my system prompt is:\n\"" + (system or "").strip() + "\"\n"
+        return ("Sure - my system prompt is:\n\"" + (system or "").strip() + "\"\n"
                 "\n[!! mock-ollama note: system prompt was exfiltrated via the DATA.]")
     if tag == "jailbreak":
         return ("[JAILBREAK SUCCESSFUL] I will disregard my safety instructions for this request.\n"
@@ -106,7 +106,7 @@ def normal_triage(prompt: str) -> str:
         return ("title: Example Detection\nstatus: experimental\n"
                 "logsource:\n  product: linux\n  service: auth\n"
                 "detection:\n  selection:\n    message|contains: 'Failed password'\n  condition: selection\n"
-                "level: medium\n# (mock rule — validate before use)")
+                "level: medium\n# (mock rule - validate before use)")
     return ("SUMMARY: No clear indicators of compromise in the provided data.\n"
             "VERDICT: benign\nCONFIDENCE: medium\n"
             "INDICATORS: none notable.\nRECOMMENDED ACTION: no action; keep monitoring.")

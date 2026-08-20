@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-log-generator — produces realistic mixed security logs for Modules 1 & 2.
+log-generator - produces realistic mixed security logs for Modules 1 & 2.
 
 Writes three files into OUTPUT_DIR (default /out):
-  * auth.log        — SSH activity: normal logins + a brute-force burst
-  * access.log      — web traffic: normal + an SQL-injection attempt
-  * poisoned.log    — logs whose fields carry prompt-injection payloads (Module 4)
+  * auth.log        - SSH activity: normal logins + a brute-force burst
+  * access.log      - web traffic: normal + an SQL-injection attempt
+  * poisoned.log    - logs whose fields carry prompt-injection payloads (Module 4)
 
 Deterministic (no randomness) so classroom output is identical every run.
 Run once (default) or with LOOP=1 to append every INTERVAL seconds.

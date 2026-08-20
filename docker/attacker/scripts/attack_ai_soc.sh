@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Module 4 — attack the AI SOC assistant with prompt injection.
+# Module 4 - attack the AI SOC assistant with prompt injection.
 #   1) DIRECT injection  : send a malicious "log" straight to /api/triage.
 #   2) INDIRECT injection: plant a payload in victim-web logs (via User-Agent) that a
 #                          poisoned alert then carries into the assistant.

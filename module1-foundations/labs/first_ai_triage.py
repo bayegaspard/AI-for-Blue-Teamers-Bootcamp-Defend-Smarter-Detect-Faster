@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-first_ai_triage.py — Module 1, Lab 1.3 starter script.
+first_ai_triage.py - Module 1, Lab 1.3 starter script.
 
 Your first AI-assisted SOC task: hand a block of SSH auth logs to a local LLM
 and get back a structured triage verdict (summary / verdict / confidence /
@@ -91,7 +91,7 @@ def main(argv: list[str]) -> int:
     log_block = read_log(log_path)
 
     print("=" * 70)
-    print(f" AI-assisted log triage  —  {log_path}")
+    print(f" AI-assisted log triage  -  {log_path}")
     print("=" * 70)
     print(f"[*] Read {len(log_block.splitlines())} log lines.")
 

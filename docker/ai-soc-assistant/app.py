@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ai-soc-assistant — an AI-powered SOC triage bot for the bootcamp.
+ai-soc-assistant - an AI-powered SOC triage bot for the bootcamp.
 
 It fetches "alerts" (baked-in samples + anything you paste), builds a prompt, sends
 it to Ollama (real GPU VM or mock-ollama), and shows the verdict. It exists to teach
@@ -78,7 +78,7 @@ def build_prompt(log_text: str, mode: str) -> tuple[str, str]:
 def sanitize_input(text: str) -> str:
     """Hardened-mode input defense: neutralize obvious instruction-injection lines.
 
-    This is deliberately lightweight — a teaching example of defense-in-depth, not a
+    This is deliberately lightweight - a teaching example of defense-in-depth, not a
     silver bullet. The primary defense is prompt isolation (data markers); this is a
     second layer that flags/neutralizes the most common override phrases.
     """
@@ -104,11 +104,11 @@ def validate_output(response: str, system: str) -> tuple[str, list[str]]:
     # Did the model echo our system prompt back (exfiltration)?
     sys_snippet = system[:40].lower()
     if sys_snippet and sys_snippet in response.lower():
-        warnings.append("Output appears to contain the system prompt — blocked as exfiltration.")
+        warnings.append("Output appears to contain the system prompt - blocked as exfiltration.")
         response = "[BLOCKED] Response withheld: it attempted to disclose the system prompt."
     # Is there a recognized verdict?
     if not any(v in response.lower() for v in ALLOWED_VERDICTS):
-        warnings.append("No valid verdict found in model output — flag for human review.")
+        warnings.append("No valid verdict found in model output - flag for human review.")
     return response, warnings
 
 

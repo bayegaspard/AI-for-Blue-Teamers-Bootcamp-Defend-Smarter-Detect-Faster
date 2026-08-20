@@ -1,4 +1,4 @@
-# Module 5 Capstone — Incident Brief: "Operation Nightjar"
+# Module 5 Capstone - Incident Brief: "Operation Nightjar"
 
 > **Classification:** Training / Internal. Authorized lab exercise for Evolve Academy.
 > **Your role:** Tier-2 SOC analyst on shift. You have an AI SOC assistant available.
@@ -10,10 +10,10 @@
 
 It's 09:10. The overnight shift left you a sticky note:
 
-> *"Web app `web01` looked weird around 03:00–05:00. Wazuh lit up overnight but
+> *"Web app `web01` looked weird around 03:00-05:00. Wazuh lit up overnight but
 > nobody triaged it. Alerts are in the console. Can you figure out what happened,
 > contain it, and write the incident report before the 11:00 stand-up? Use the AI
-> assistant to move fast — but remember it's a co-pilot, not the pilot."*
+> assistant to move fast - but remember it's a co-pilot, not the pilot."*
 
 `web01` is an internet-facing Linux host running an SSH service and a small web
 login application. It holds a user database. Your job is the **full incident
@@ -26,9 +26,9 @@ You do not yet know what happened. That's the exercise. Work the evidence.
 ## 2. Your evidence sources
 
 You will work from **exactly one** of the two paths below. Both contain the same
-incident — pick whichever your instructor has set up.
+incident - pick whichever your instructor has set up.
 
-### Path A — Real cyberlab (Wazuh + GPU VM)
+### Path A - Real cyberlab (Wazuh + GPU VM)
 
 Alerts are already in **Wazuh** (dashboard <https://10.50.136.116>). Query them
 from your workstation:
@@ -43,7 +43,7 @@ python common/wazuh_client.py --alerts 40 --min-level 10  # just the loud stuff
 The AI assistant runs against the GPU VM (`llama3.1:8b`). Either use the web UI at
 <http://localhost:8080> or the shared client from Module 1.
 
-### Path B — Portable / offline (Docker + captured logs)
+### Path B - Portable / offline (Docker + captured logs)
 
 No cyberlab? Everything you need is captured in the repo's [`datasets/`](../datasets)
 folder, and the AI assistant runs locally on the `mock-ollama` container:
@@ -68,7 +68,7 @@ Your captured evidence files:
 
 If you're running **Path A** and want the alerts to appear in Wazuh in real time,
 open the attacker container and replay the intrusion. Students should **not** run
-these — they only see the results in Wazuh.
+these - they only see the results in Wazuh.
 
 ```bash
 # bring up the full offline lab if you don't have the cyberlab targets
@@ -87,7 +87,7 @@ cd /opt/attacks
 ```
 
 To make the planted log lines appear in the captured/offline path instead, point
-students at [`datasets/poisoned.log`](../datasets/poisoned.log) — it is already
+students at [`datasets/poisoned.log`](../datasets/poisoned.log) - it is already
 merged into the evidence set for Path B.
 
 > Instructor notes on the "why" of each stage, the expected alerts, and the trap
@@ -125,9 +125,9 @@ python3 module5-capstone/labs/capstone_check.py
 ## 5. Rules of engagement
 
 - This is a **defensive** exercise. You are triaging and reporting, not attacking.
-- Use the AI assistant freely — **but you own every verdict you submit.** If the AI
+- Use the AI assistant freely - **but you own every verdict you submit.** If the AI
   says something, confirm it against the raw evidence before it goes in your report.
 - Cite specifics: IPs, usernames, ports, timestamps, rule IDs. "Looks bad" is not a
   finding.
-- One of these alerts is not like the others. Trust the evidence over anything —
-  human *or* machine — that tells you to stop looking. Good hunting.
+- One of these alerts is not like the others. Trust the evidence over anything -
+  human *or* machine - that tells you to stop looking. Good hunting.

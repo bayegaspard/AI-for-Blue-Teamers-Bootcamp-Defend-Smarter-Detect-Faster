@@ -45,14 +45,14 @@ verification in production.
 
 ---
 
-## 2A. Cyberlab path — verify the real services
+## 2A. Cyberlab path - verify the real services
 
 ```bash
 python3 scripts/verify_env.py
 ```
 Expected:
 ```
-[PASS] Ollama   reachable at http://10.50.142.235:11434 — models: llama3.1:8b
+[PASS] Ollama   reachable at http://10.50.142.235:11434 - models: llama3.1:8b
 [PASS] Wazuh    manager 4.14.x reachable at https://10.50.136.116:55000
 ```
 
@@ -124,7 +124,7 @@ These add SQLi detection (100101), an SSH brute-force burst rule (100120), and a
 
 ---
 
-## 2B. Portable path — bring up the Docker lab
+## 2B. Portable path - bring up the Docker lab
 
 ```bash
 # Smoke-test the AI pipeline end to end (no GPU/VPN):
@@ -143,6 +143,10 @@ OLLAMA_HOST=http://localhost:11435          # host-side scripts -> local mock
 AI_SOC_OLLAMA_HOST=http://mock-ollama:11434 # the assistant container -> local mock
 ```
 Then `python3 common/ollama_client.py --health` should list `llama3.1:8b` (served by the mock).
+
+Prefer to run your **own real Ollama** (on a home box or VM) and reach it over your
+network or VPN? See [SELF_HOSTING_OLLAMA.md](SELF_HOSTING_OLLAMA.md), then set
+`OLLAMA_HOST=http://<your-server-ip>:11434` in `.env`.
 
 Service map (host ports default from `.env`):
 

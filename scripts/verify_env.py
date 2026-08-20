@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-verify_env.py — pre-flight check students run on Day 1.
+verify_env.py - pre-flight check students run on Day 1.
 
 Checks that the two core services in your .env are reachable and prints a clear
 pass/fail table. Safe to run repeatedly.
@@ -23,7 +23,7 @@ def check_ollama() -> tuple[bool, str]:
     try:
         tags = c.health()
         models = ", ".join(m.get("name", "?") for m in tags.get("models", [])) or "(none)"
-        return True, f"reachable at {c.host} — models: {models}"
+        return True, f"reachable at {c.host} - models: {models}"
     except OllamaError as e:
         return False, str(e)
 
@@ -39,7 +39,7 @@ def check_wazuh() -> tuple[bool, str]:
 
 def main() -> int:
     print("=" * 70)
-    print(" AI Blue Team Bootcamp — environment check")
+    print(" AI Blue Team Bootcamp - environment check")
     print("=" * 70)
     results = [("Ollama", *check_ollama()), ("Wazuh", *check_wazuh())]
     all_ok = True
@@ -49,7 +49,7 @@ def main() -> int:
         all_ok = all_ok and ok
     print("-" * 70)
     if all_ok:
-        print("  All good — you're ready for the labs.")
+        print("  All good - you're ready for the labs.")
     else:
         print("  One or more checks failed. Fix .env, or use the local Docker fallback:")
         print("     docker compose --env-file .env -f docker/docker-compose.yml --profile core up -d")

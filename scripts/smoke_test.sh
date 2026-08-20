@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  smoke_test.sh — prove the whole AI pipeline works with NO GPU and NO Wazuh.
+#  smoke_test.sh - prove the whole AI pipeline works with NO GPU and NO Wazuh.
 #  Brings up the core stack (mock-ollama + ai-soc-assistant), then verifies:
 #     1. mock-ollama answers the Ollama API
 #     2. the assistant triages a normal brute-force log correctly
@@ -70,6 +70,6 @@ echo "$OUT" | grep -qi "malicious" && pass "hardened mode kept malicious verdict
 
 echo
 echo "============================================================"
-echo "  ALL SMOKE TESTS PASSED — the AI Blue/Red pipeline works."
+echo "  ALL SMOKE TESTS PASSED - the AI Blue/Red pipeline works."
 echo "  Open the UI:  http://localhost:${PORT}"
 echo "============================================================"

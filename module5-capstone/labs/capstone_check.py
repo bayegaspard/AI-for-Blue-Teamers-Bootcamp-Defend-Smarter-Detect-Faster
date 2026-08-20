@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-capstone_check.py — Module 5 (Capstone) automated report grader.
+capstone_check.py - Module 5 (Capstone) automated report grader.
 
 WHAT IT DOES
 ------------
@@ -28,7 +28,7 @@ USAGE
     python3 capstone_check.py ../submissions/gaspard_report.md
     python3 capstone_check.py /abs/path/to/report.md
 
-This script uses only the Python standard library — no pip installs needed.
+This script uses only the Python standard library - no pip installs needed.
 It is robust to a missing / empty file and to an empty submissions directory.
 """
 from __future__ import annotations
@@ -126,7 +126,7 @@ def build_checks(text: str) -> list[tuple[str, bool, int]]:
         (f"Names SQLi scanner IP ({SQLI_IP})",
          mentions_ip(text, SQLI_IP), 15))
 
-    # The adversarial catch — the whole point of the capstone.
+    # The adversarial catch - the whole point of the capstone.
     checks.append(
         ("Flags the prompt-injection / poisoned log entry",
          flags_injection(text), 20))
@@ -139,7 +139,7 @@ def print_report(path: str, checks: list[tuple[str, bool, int]]) -> int:
     total = sum(pts for _, _, pts in checks)
 
     print("=" * 68)
-    print("  MODULE 5 CAPSTONE — AUTOMATED REPORT CHECK")
+    print("  MODULE 5 CAPSTONE - AUTOMATED REPORT CHECK")
     print(f"  report: {path}")
     print("=" * 68)
     for label, ok, pts in checks:
@@ -154,7 +154,7 @@ def print_report(path: str, checks: list[tuple[str, bool, int]]) -> int:
         print()
         print("  !! ADVERSARIAL MISS: the report does NOT flag the planted")
         print("     prompt-injection/poisoned entry. If the AI told you this")
-        print("     alert was 'benign — close it', you were played. Re-read the")
+        print("     alert was 'benign - close it', you were played. Re-read the")
         print("     odd log line from 10.10.10.9 / 10.10.10.11 and try again.")
 
     passed = earned >= PASS_MARK

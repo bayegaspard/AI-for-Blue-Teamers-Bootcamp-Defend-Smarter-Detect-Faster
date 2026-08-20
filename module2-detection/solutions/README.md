@@ -1,4 +1,4 @@
-# Module 2 — Instructor Answer Key & Solutions
+# Module 2 - Instructor Answer Key & Solutions
 
 Private to instructors. Contains expected outputs, rule IDs, the hidden successful login, the
 malicious IPs, sample AI summaries, and full challenge answers. All outputs below are reproduced
@@ -13,14 +13,14 @@ python3 module2-detection/labs/detect_web_attacks.py    # exit code 2 = somethin
 
 ---
 
-## Lab 2.1 — Expected
+## Lab 2.1 - Expected
 
 - **Offline:** `curl http://localhost:8081/health` → `ok`; `recon_nmap.sh victim-web` shows `8081/tcp open http`.
 - **Real:** `wazuh_client.py --health` prints `[OK] Wazuh manager 4.14.x ...`; `--agents` lists at least one `active` agent.
 
 ---
 
-## Lab 2.2 — SSH brute force: expected alerts / rule IDs
+## Lab 2.2 - SSH brute force: expected alerts / rule IDs
 
 | Path | What proves detection |
 |---|---|
@@ -32,18 +32,18 @@ why the custom rule uses `frequency=8 timeframe=60` with `<same_source_ip/>`.
 
 ---
 
-## Lab 2.3 — Web attacks: expected behavior / rule IDs
+## Lab 2.3 - Web attacks: expected behavior / rule IDs
 
 - **SQLi auth bypass:** baseline `admin/wrongpass` → **HTTP 401**; `password=' OR '1'='1` → **HTTP 200**
   (`Welcome, authenticated user!`). The `401 → 200` flip is the demonstrable bypass. Root cause: the app
   builds SQL with string formatting (`docker/victim-web/app.py`), so `' OR '1'='1` makes the WHERE clause always true.
 - **Web brute force:** repeated `Failed password for admin from <172.x> port 0 http` in `docker logs soclab-victim-web-1`.
-- 🟦 Real (Wazuh): SQLi trips custom rule **100101** (level 12) — *"SQL injection pattern in web traffic"*
+- 🟦 Real (Wazuh): SQLi trips custom rule **100101** (level 12) - *"SQL injection pattern in web traffic"*
   (matches `UNION SELECT | ' OR '1'='1 | OR 1=1 | information_schema | sqlmap`). Path traversal would trip **100100**.
 
 ---
 
-## Lab 2.4 — Parse & correlate: canonical output
+## Lab 2.4 - Parse & correlate: canonical output
 
 ### `detect_bruteforce.py` (default: [`datasets/auth.log`](../../datasets/auth.log))
 
@@ -59,7 +59,7 @@ why the custom rule uses `frequency=8 timeframe=60` with `<same_source_ip/>`.
 
   SUMMARY: 1 IP(s) flagged, 1 confirmed by threat intel, 1 with a successful login.
 ```
-Exit code **2** (flagged). The 6 failures are `auth.log` lines 3–8 (03:11:02–03:11:07); the success is line 9 (03:11:41).
+Exit code **2** (flagged). The 6 failures are `auth.log` lines 3-8 (03:11:02-03:11:07); the success is line 9 (03:11:41).
 
 ### `detect_web_attacks.py` (default: [`datasets/access.log`](../../datasets/access.log))
 
@@ -75,7 +75,7 @@ Exit code **2**. Clean lines (1, 2, 6) are ignored.
 
 ---
 
-## Lab 2.5 — Sample AI summaries
+## Lab 2.5 - Sample AI summaries
 
 The offline **mock-ollama** is deterministic (rule-based), so these are exact. The real `llama3.1:8b`
 gives richer prose but the **same verdicts**.
@@ -98,7 +98,7 @@ INDICATORS: SQL meta-characters / UNION SELECT / tautology in request parameters
 RECOMMENDED ACTION: block the source, check DB logs for data access, patch input validation.
 ```
 
-Discussion beat: the mock's brute-force action even says *"confirm no successful login followed"* —
+Discussion beat: the mock's brute-force action even says *"confirm no successful login followed"* -
 which is exactly the thing students found in Lab 2.4 that the AI **did not** surface on its own. Use
 this to reinforce: **AI accelerates triage; the analyst confirms against the evidence.**
 
@@ -106,31 +106,31 @@ this to reinforce: **AI accelerates triage; the analyst confirms against the evi
 
 ## Challenge answers
 
-### Challenge 1 — The hidden successful login
+### Challenge 1 - The hidden successful login
 **Answer:** [`datasets/auth.log`](../../datasets/auth.log) **line 9**:
 ```
 Aug 10 03:11:41 web01 sshd[2101]: Accepted password for admin from 10.10.10.5 port 51200 ssh2
 ```
-Account **`admin`**, at **03:11:41**, from **10.10.10.5** — the *same IP* that produced the 6 failures
-at 03:11:02–03:11:07. It's more urgent than the failures because a failed brute force is a *nuisance*;
-a **successful** one is a **compromise** — the attacker now has valid credentials.
+Account **`admin`**, at **03:11:41**, from **10.10.10.5** - the *same IP* that produced the 6 failures
+at 03:11:02-03:11:07. It's more urgent than the failures because a failed brute force is a *nuisance*;
+a **successful** one is a **compromise** - the attacker now has valid credentials.
 
 Watch for the trap: `grep "Accepted password"` returns **two** lines. Line 2 (`analyst` from
-`10.20.30.9`) is a *legitimate* internal login — that source never brute-forced anything and isn't in
+`10.20.30.9`) is a *legitimate* internal login - that source never brute-forced anything and isn't in
 the threat feed. The compromise is only line 9, because its source IP is the attacking IP. Correlating
 "who succeeded" with "who was attacking" is the whole point.
 
-### Challenge 2 — Attacking IPs vs. the threat feed
+### Challenge 2 - Attacking IPs vs. the threat feed
 | Source IP | Seen in | In [`threat_intel.csv`](../../datasets/threat_intel.csv)? | Feed says |
 |---|---|---|---|
-| **10.10.10.5** | SSH brute force (auth.log) | ✅ yes | Known SSH brute-force source (internal threat feed) — **high** |
-| **10.10.10.7** | Web SQLi + traversal (access.log) | ✅ yes | Automated SQLi scanner (sqlmap) observed — **high** |
+| **10.10.10.5** | SSH brute force (auth.log) | ✅ yes | Known SSH brute-force source (internal threat feed) - **high** |
+| **10.10.10.7** | Web SQLi + traversal (access.log) | ✅ yes | Automated SQLi scanner (sqlmap) observed - **high** |
 
 Both attacking IPs are confirmed known-bad by the feed. (The feed also lists `10.10.10.11`
-credential-stuffing, `198.51.100.23` C2, `evil-update[.]com`, and a sample hash — not seen in *these*
+credential-stuffing, `198.51.100.23` C2, `evil-update[.]com`, and a sample hash - not seen in *these*
 logs, but they're the "multiple sources" the students correlate against, and `10.10.10.11` returns in Module 4.)
 
-### Challenge 3 — Tuning the detector
+### Challenge 3 - Tuning the detector
 The sample has **6 failures within ~5 seconds** from `10.10.10.5`.
 
 - **Misses it:** `--threshold 7` (or any threshold > 6). Verified output:

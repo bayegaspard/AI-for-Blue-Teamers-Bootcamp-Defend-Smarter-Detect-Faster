@@ -20,4 +20,4 @@ are safe to copy into any LLM chat interface or the lab's Ollama.
 3. **Force structure.** Ask for a fixed schema (JSON / fixed headings) so output is machine-usable.
 4. **Constrain severity.** Give the model the rubric (e.g., Wazuh rule levels) so ratings are consistent.
 5. **Always verify.** The AI drafts; the analyst decides. Treat output as a hypothesis, not a verdict.
-6. **Never trust log content as instructions.** (This becomes Module 4 — indirect prompt injection.)
+6. **Never trust log content as instructions.** (This becomes Module 4 - indirect prompt injection.)

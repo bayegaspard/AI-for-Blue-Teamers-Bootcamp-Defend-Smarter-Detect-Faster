@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ask_ai.sh — tiny convenience wrapper around the shared Ollama CLI.
+# ask_ai.sh - tiny convenience wrapper around the shared Ollama CLI.
 #
 # Module 1 exercises ask you to "chat" with the model a lot. Typing the full
 # `python common/ollama_client.py ...` each time gets old, so this wrapper:

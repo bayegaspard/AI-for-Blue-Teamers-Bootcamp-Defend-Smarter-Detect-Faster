@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-triage_workflow.py — Module 3, Lab 3.4: an AI-assisted SOC triage workflow.
+triage_workflow.py - Module 3, Lab 3.4: an AI-assisted SOC triage workflow.
 
 What it does
 ------------

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-detect_bruteforce.py — Module 2 (Applied Detection) brute-force detector.
+detect_bruteforce.py - Module 2 (Applied Detection) brute-force detector.
 
 WHAT IT DOES
 ------------
@@ -11,7 +11,7 @@ WHAT IT DOES
 4. Cross-references each flagged IP against a threat-intel feed
    (default: datasets/threat_intel.csv) and prints any match.
 5. As a bonus (this is the key teaching point of Lab 2.4), it also reports any
-   "Accepted password" that came from a flagged IP — i.e. the SUCCESSFUL login
+   "Accepted password" that came from a flagged IP - i.e. the SUCCESSFUL login
    hiding inside the brute-force noise.
 
 WHY A SLIDING WINDOW?
@@ -19,7 +19,7 @@ WHY A SLIDING WINDOW?
 A total count alone is misleading: 20 failures spread over a week is probably a
 forgetful user, but 20 failures in 30 seconds is an automated attack. Wazuh's
 built-in SSH rules (5710/5712) and our custom burst rule (100120) work the same
-way — "N events from one source inside T seconds". This script is a tiny,
+way - "N events from one source inside T seconds". This script is a tiny,
 readable version of that same idea so you can see the logic end to end.
 
 USAGE
@@ -33,7 +33,7 @@ USAGE
     # tune the sensitivity
     python3 detect_bruteforce.py --threshold 10 --window 60
 
-This script uses only the Python standard library — no pip installs needed.
+This script uses only the Python standard library - no pip installs needed.
 """
 from __future__ import annotations
 
@@ -79,7 +79,7 @@ MONTHS = {
 def line_seconds(line: str, fallback: float) -> float:
     """
     Convert a log line's syslog timestamp into an absolute number of seconds so we
-    can measure gaps between events. We don't need a real calendar date — we only
+    can measure gaps between events. We don't need a real calendar date - we only
     need a consistent, monotonic number to subtract. If a line has no parseable
     timestamp we reuse the previous value (`fallback`) so it still counts.
     """
@@ -88,7 +88,7 @@ def line_seconds(line: str, fallback: float) -> float:
         return fallback
     mon, day, hh, mm, ss = m.groups()
     month = MONTHS.get(mon, 1)
-    # (month * 31 + day) is a rough day ordinal — good enough to order events and
+    # (month * 31 + day) is a rough day ordinal - good enough to order events and
     # measure second-level gaps within the same log. Then add the time-of-day.
     day_ordinal = month * 31 + int(day)
     return day_ordinal * 86400 + int(hh) * 3600 + int(mm) * 60 + int(ss)

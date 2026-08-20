@@ -1,5 +1,5 @@
 # =============================================================================
-#  AI Blue Team Bootcamp — lab stack
+#  AI Blue Team Bootcamp - lab stack
 #  Run from the repo root so the shared .env is picked up:
 #     docker compose --env-file .env -f docker/docker-compose.yml --profile core up -d
 #
@@ -64,7 +64,7 @@ services:
       PGID: "1000"
       TZ: "Etc/UTC"
       USER_NAME: "labuser"
-      # Weak password on purpose — it's in the brute-force wordlist so the attack succeeds.
+      # Weak password on purpose - it's in the brute-force wordlist so the attack succeeds.
       USER_PASSWORD: "Password1"
       PASSWORD_ACCESS: "true"
     restart: unless-stopped

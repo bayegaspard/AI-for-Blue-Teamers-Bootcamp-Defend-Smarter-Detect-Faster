@@ -71,7 +71,7 @@ def clean_text(s) -> str:
     if s is None:
         return ""
     s = str(s)
-    for bad in ("—", "–", "―", "‒"):
+    for bad in ("\u2010", "\u2011", "\u2012", "\u2013", "\u2014", "\u2015", "\u2212"):
         s = s.replace(bad, "-")
     s = s.replace("→", "to").replace("’", "'").replace("‘", "'")
     s = s.replace("“", '"').replace("”", '"').replace("…", "...")

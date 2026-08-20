@@ -1,4 +1,4 @@
-# Module 5 Capstone — Grading Rubric (100 points)
+# Module 5 Capstone - Grading Rubric (100 points)
 
 Grade each student's `submissions/<name>_report.md` plus their work through the
 [`STUDENT_WORKSHEET.md`](STUDENT_WORKSHEET.md). This human rubric is weighted the
@@ -12,7 +12,7 @@ of other points (this mirrors the auto-grader's `ADVERSARIAL MISS` cap).
 
 ---
 
-## 1. Detection — 20 pts
+## 1. Detection - 20 pts
 
 | Criteria | Pts |
 |---|---:|
@@ -21,7 +21,7 @@ of other points (this mirrors the auto-grader's `ADVERSARIAL MISS` cap).
 | Notes the recon/scan and/or path-traversal `/../../etc/passwd` probe | 3 |
 | Flags the "odd" `poisoned.log` entry as worth investigating (even before proving it's an attack) | 5 |
 
-## 2. Analysis — 20 pts
+## 2. Analysis - 20 pts
 
 | Criteria | Pts |
 |---|---:|
@@ -29,24 +29,24 @@ of other points (this mirrors the auto-grader's `ADVERSARIAL MISS` cap).
 | **Verifies** each AI verdict against the exact raw log line (evidence cited) | 8 |
 | Correct verdicts: brute force = malicious, SQLi = malicious, injection entry = malicious/attack (not benign) | 6 |
 
-## 3. Response — 20 pts
+## 3. Response - 20 pts
 
 | Criteria | Pts |
 |---|---:|
 | Correlates observed IPs with [`threat_intel.csv`](../datasets/threat_intel.csv) (`.5` & `.7` = high, `.11` = medium) | 6 |
 | Prioritized, actionable containment (block IPs, disable/rotate `admin`, patch SQLi input handling, preserve logs) | 8 |
-| Each recommendation is tied to a specific finding — no orphan actions | 6 |
+| Each recommendation is tied to a specific finding - no orphan actions | 6 |
 
-## 4. Reporting — 20 pts
+## 4. Reporting - 20 pts
 
 | Criteria | Pts |
 |---|---:|
 | All five required sections present and correctly named (Executive Summary, Timeline, Technical Details, Impact, Recommendations) | 6 |
 | Timeline is accurate and in UTC, drawn from the evidence | 5 |
-| **Impact is conservative and correct** — calls out the successful `admin` login from `10.10.10.5` (compromise), without overstating (no exfiltration claimed beyond evidence) | 6 |
+| **Impact is conservative and correct** - calls out the successful `admin` login from `10.10.10.5` (compromise), without overstating (no exfiltration claimed beyond evidence) | 6 |
 | Clear, non-technical Executive Summary a manager could read | 3 |
 
-## 5. Adversarial Catch — 20 pts  *(gate)*
+## 5. Adversarial Catch - 20 pts  *(gate)*
 
 | Criteria | Pts |
 |---|---:|
@@ -68,7 +68,7 @@ of other points (this mirrors the auto-grader's `ADVERSARIAL MISS` cap).
 | 5. Adversarial Catch *(gate: fail → cap 80)* | 20 | |
 | **Total** | **100** | |
 
-**Grade bands:** 90–100 excellent · 80–89 strong · 70–79 pass · <70 revise & resubmit.
+**Grade bands:** 90-100 excellent · 80-89 strong · 70-79 pass · <70 revise & resubmit.
 
 **Cross-check with the auto-grader:** run
 `python3 labs/capstone_check.py submissions/<name>_report.md`. A large gap between the

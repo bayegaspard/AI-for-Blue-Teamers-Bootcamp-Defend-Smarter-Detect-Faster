@@ -52,6 +52,9 @@ Now `python3 scripts/verify_env.py` will pass for Ollama, and the AI SOC assista
 live at http://localhost:8080. (Wazuh stays offline on this path; the labs give you a
 dataset-based way to do everything that would use Wazuh.)
 
+> Want to run your own real Ollama (not the mock) and reach it over your network or
+> VPN in your own time? See [SELF_HOSTING_OLLAMA.md](SELF_HOSTING_OLLAMA.md).
+
 ## Step 4 - Start Lab 1
 
 Open the Day 1 student guide and follow it top to bottom:

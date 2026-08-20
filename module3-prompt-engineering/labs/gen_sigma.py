@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-gen_sigma.py — Module 3, Lab 3.2: draft a Sigma rule from a behavior description.
+gen_sigma.py - Module 3, Lab 3.2: draft a Sigma rule from a behavior description.
 
 Fills the `sigma_generation` prompt (common/prompts/sigma_generation.md) with a
 plain-English behavior description, sends it to the model via OllamaClient using the

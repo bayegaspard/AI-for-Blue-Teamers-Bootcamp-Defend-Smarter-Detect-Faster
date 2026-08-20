@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-wazuh_client.py — thin client for the Wazuh 4.14 manager API + indexer.
+wazuh_client.py - thin client for the Wazuh 4.14 manager API + indexer.
 
 Used by Modules 2, 3, and 5 to pull agents and alerts programmatically so the AI
 labs can feed real SIEM data into Ollama.
