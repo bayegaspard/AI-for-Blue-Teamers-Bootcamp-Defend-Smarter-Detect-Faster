@@ -6,7 +6,7 @@ your AI SOC assistant, then catch the one thing the AI gets wrong.
 
 **How to use this sheet:** Do the tasks in order. Each has a **What to run**, an
 **Expected output**, and a **Checkpoint** you must be able to tick before moving on.
-Everything runs from the **repo root** (`/Users/drbae/BASE/evolve`) unless noted.
+Everything runs from the **repo root** (the folder you cloned) unless noted.
 
 > **Two paths, same incident.** Every task gives a **Real cyberlab** command and a
 > **Portable/offline** command. Use whichever your instructor set up. If in doubt,

@@ -35,7 +35,7 @@ The reusable templates you'll use today live in [../common/prompts/](../common/p
 
 You can do every lab on either the **real cyberlab** (GPU model + Wazuh) or the
 **portable/offline** stack (a GPU-free mock). The commands are identical; only your
-`.env` differs. Run everything from the **repo root** (`/Users/drbae/BASE/evolve`).
+`.env` differs. Run everything from the **repo root** (the folder you cloned).
 
 ### Path A — Real cyberlab
 Your [.env](../.env) already points at the GPU VM and Wazuh:

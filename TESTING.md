@@ -7,7 +7,7 @@ are two layers:
 2. **Manual acceptance** - a per-module checklist, including the Wazuh dashboard steps
    a script cannot verify for you.
 
-Run everything from the repo root: `cd /Users/drbae/BASE/evolve`.
+Run everything from the repo root: `cd path/to/repo`.
 
 ---
 

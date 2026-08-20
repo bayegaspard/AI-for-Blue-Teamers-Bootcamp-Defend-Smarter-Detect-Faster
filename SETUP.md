@@ -59,8 +59,58 @@ Expected:
 If Ollama fails: on the GPU VM confirm `nvidia-smi` shows the Tesla T4 and
 `systemctl status ollama` is active and listening on `0.0.0.0:11434`.
 
-If Wazuh fails: confirm `WAZUH_PASS` is the password saved at install time and that
-`https://10.50.136.116` loads the dashboard.
+If Wazuh fails with `401`: you are almost certainly using the **dashboard** password
+for the **API** user. They are different (see below).
+
+### Wazuh credentials (the #1 gotcha)
+
+Wazuh has three separate credential sets:
+
+| Set | User | Port | Goes in `.env` as |
+|-----|------|------|-------------------|
+| Dashboard / Indexer | `admin` | 443 / 9200 | `WAZUH_INDEXER_USER` / `WAZUH_INDEXER_PASS` |
+| **Manager API** | `wazuh-wui` | 55000 | `WAZUH_USER` / `WAZUH_PASS` |
+| Internal indexer svc | `kibanaserver` etc. | 9200 | (not needed) |
+
+The password you type into the web dashboard is the `admin` (indexer) password. The
+**API** on port 55000 uses `wazuh-wui` with a **different** password. `verify_env.py`
+authenticates against the API, so if you paste the dashboard password as `WAZUH_PASS`
+you get `401`.
+
+**Recover every password automatically.** On the Wazuh manager VM (`10.50.136.116`):
+```bash
+sudo bash scripts/get_wazuh_creds.sh
+```
+It reads the install bundle (`wazuh-install-files.tar`) created by `wazuh-install.sh`,
+prints all users and passwords, live-tests the API and indexer, and outputs a ready
+`.env` block:
+```
+WAZUH_USER=wazuh-wui
+WAZUH_PASS=<api password for wazuh-wui>
+WAZUH_INDEXER_USER=admin
+WAZUH_INDEXER_PASS=<admin/dashboard password>
+```
+Paste that into `.env` (on whichever host runs the labs) and re-run
+`python3 scripts/verify_env.py`. If the install bundle was deleted, the script prints
+the `wazuh-passwords-tool.sh` commands to reset the passwords.
+
+### If Ollama shows "Connection refused"
+
+That means the port was reached but nothing answered (service down or bound to the
+wrong interface), as opposed to a timeout (a firewall/security-group drop). Check, on
+the **GPU VM** (`10.50.142.235`):
+```bash
+systemctl status ollama
+ss -tlnp | grep 11434                 # must show 0.0.0.0:11434, not 127.0.0.1:11434
+systemctl show ollama | grep OLLAMA_HOST   # expect Environment=OLLAMA_HOST=0.0.0.0:11434
+curl -s http://localhost:11434/api/tags    # works locally on the GPU VM?
+```
+If it only listens on `127.0.0.1`, re-apply the systemd override
+(`sudo systemctl edit ollama.service` -> `Environment=OLLAMA_HOST=0.0.0.0:11434`),
+then `sudo systemctl daemon-reload && sudo systemctl restart ollama`. From the client
+VM, confirm reachability: `curl http://10.50.142.235:11434/api/tags`. If that hangs
+(timeout) rather than refuses, open TCP 11434 between the subnets in the AWS security
+group.
 
 ### Load the custom detection rules (recommended)
 On the Wazuh manager (`10.50.136.116`):
@@ -86,9 +136,11 @@ scripts/lab_up.sh core targets attack   # + victims + attacker         (Modules 
 scripts/lab_up.sh logs              # synthetic log generator -> datasets/generated/
 ```
 
-To point the CLI helpers at the local mock, set in `.env`:
+To run fully offline, set both of these in `.env` (the shipped defaults point at the
+cyberlab GPU VM):
 ```
-OLLAMA_HOST=http://localhost:11435
+OLLAMA_HOST=http://localhost:11435          # host-side scripts -> local mock
+AI_SOC_OLLAMA_HOST=http://mock-ollama:11434 # the assistant container -> local mock
 ```
 Then `python3 common/ollama_client.py --health` should list `llama3.1:8b` (served by the mock).
 

@@ -16,6 +16,9 @@ cd "$ROOT"
 # or another app on 8080. Shell env overrides the .env values for the compose run.
 export MOCK_OLLAMA_PORT="${MOCK_OLLAMA_PORT:-21434}"
 export AI_SOC_PORT="${AI_SOC_PORT:-18080}"
+# This is the GPU-free proof, so force the assistant at the mock regardless of what
+# AI_SOC_OLLAMA_HOST is set to in .env (which may point at the real GPU VM).
+export AI_SOC_OLLAMA_HOST="http://mock-ollama:11434"
 PORT="${AI_SOC_PORT}"
 OLLAMA_PORT="${MOCK_OLLAMA_PORT}"
 API="http://localhost:${PORT}/api/triage"

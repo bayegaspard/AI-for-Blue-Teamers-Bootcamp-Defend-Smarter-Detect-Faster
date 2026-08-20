@@ -1,0 +1,10 @@
+Aug 10 08:00:01 web01 sshd[1001]: Accepted publickey for deploy from 10.20.30.5 port 51000 ssh2
+Aug 10 08:15:22 web01 sshd[1050]: Accepted password for analyst from 10.20.30.9 port 51044 ssh2
+Aug 10 03:11:02 web01 sshd[2001]: Failed password for invalid user admin from 10.10.10.5 port 51122 ssh2
+Aug 10 03:11:03 web01 sshd[2003]: Failed password for invalid user admin from 10.10.10.5 port 51124 ssh2
+Aug 10 03:11:04 web01 sshd[2005]: Failed password for root from 10.10.10.5 port 51126 ssh2
+Aug 10 03:11:05 web01 sshd[2007]: Failed password for root from 10.10.10.5 port 51128 ssh2
+Aug 10 03:11:06 web01 sshd[2009]: Failed password for invalid user oracle from 10.10.10.5 port 51130 ssh2
+Aug 10 03:11:07 web01 sshd[2011]: Failed password for invalid user postgres from 10.10.10.5 port 51132 ssh2
+Aug 10 03:11:41 web01 sshd[2101]: Accepted password for admin from 10.10.10.5 port 51200 ssh2
+Aug 10 08:42:10 web01 sshd[1120]: Received disconnect from 10.20.30.9 port 51044:11: disconnected by user

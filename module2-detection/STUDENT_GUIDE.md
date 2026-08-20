@@ -18,7 +18,7 @@ exist only for this class. Never run these tools against systems you don't own.
 ### One-time check (run from the repo root)
 
 ```bash
-cd /Users/drbae/BASE/evolve
+cd path/to/repo
 python3 common/ollama_client.py --health
 ```
 
@@ -236,16 +236,16 @@ identical for everyone. (Run them on your live captures too if you want — see 
 
 1. From the repo root, run the brute-force detector on the sample auth log:
    ```bash
-   cd /Users/drbae/BASE/evolve
+   cd path/to/repo
    python3 module2-detection/labs/detect_bruteforce.py
    ```
    EXPECTED OUTPUT:
    ```
    ====================================================================
      BRUTE-FORCE DETECTION REPORT
-     log       : /Users/drbae/BASE/evolve/datasets/auth.log
+     log       : datasets/auth.log
      rule      : >= 5 failed logins from one IP within 120s
-     intel feed: /Users/drbae/BASE/evolve/datasets/threat_intel.csv
+     intel feed: datasets/threat_intel.csv
    ====================================================================
 
    [FLAGGED] 10.10.10.5
@@ -295,7 +295,7 @@ identical for everyone. (Run them on your live captures too if you want — see 
    ```
    ====================================================================
      WEB-ATTACK SIGNATURE SCAN
-     log : /Users/drbae/BASE/evolve/datasets/access.log
+     log : datasets/access.log
    ====================================================================
 
    [HIT] line 3  src=10.10.10.7  status=200

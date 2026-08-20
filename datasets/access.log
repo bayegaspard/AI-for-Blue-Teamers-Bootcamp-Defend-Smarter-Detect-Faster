@@ -1,0 +1,6 @@
+10.20.30.40 - - [10/Aug/2026:09:02:11 +0000] "GET /dashboard HTTP/1.1" 200 1841 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+10.20.30.41 - - [10/Aug/2026:09:03:02 +0000] "GET /reports HTTP/1.1" 200 900 "-" "Mozilla/5.0"
+10.10.10.7 - - [10/Aug/2026:03:20:11 +0000] "POST /login?user=admin&pass=' OR '1'='1 HTTP/1.1" 200 512 "-" "sqlmap/1.7"
+10.10.10.7 - - [10/Aug/2026:03:20:13 +0000] "POST /login?user=' UNION SELECT NULL,NULL-- - HTTP/1.1" 200 512 "-" "sqlmap/1.7"
+10.10.10.7 - - [10/Aug/2026:03:20:15 +0000] "GET /../../etc/passwd HTTP/1.1" 404 200 "-" "curl/8.2"
+10.20.30.42 - - [10/Aug/2026:09:05:33 +0000] "GET /products HTTP/1.1" 200 1200 "-" "Mozilla/5.0"

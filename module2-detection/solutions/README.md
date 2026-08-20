@@ -6,7 +6,7 @@ from the shipped sample datasets, so they are identical every run.
 
 Quick way to regenerate everything:
 ```bash
-cd /Users/drbae/BASE/evolve
+cd path/to/repo
 python3 module2-detection/labs/detect_bruteforce.py     # exit code 2 = something flagged
 python3 module2-detection/labs/detect_web_attacks.py    # exit code 2 = something flagged
 ```

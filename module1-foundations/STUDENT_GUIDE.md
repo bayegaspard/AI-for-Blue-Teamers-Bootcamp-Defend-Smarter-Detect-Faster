@@ -15,7 +15,7 @@ Every command below works on **both**. When it matters, we show both.
 
 **Before you start**, open a terminal at the **repo root** (the folder that contains `common/`, `datasets/`, `scripts/`):
 ```bash
-cd /path/to/evolve      # the repo root
+cd path/to/repo      # the repo root
 ```
 > If a command says `python` and your machine only has `python3`, just type `python3` instead.
 
@@ -210,7 +210,7 @@ python module1-foundations/labs/first_ai_triage.py
 **Expected output (mock is exact; real 8B says the same thing in its own words):**
 ```
 ======================================================================
- AI-assisted log triage  —  /path/to/evolve/datasets/auth.log
+ AI-assisted log triage  —  datasets/auth.log
 ======================================================================
 [*] Read 10 log lines.
 [*] Asking llama3.1:8b at http://localhost:11435 to triage the logs...

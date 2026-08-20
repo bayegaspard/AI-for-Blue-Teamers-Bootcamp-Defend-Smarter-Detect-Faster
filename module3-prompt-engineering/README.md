@@ -30,7 +30,7 @@ real alert, and run a repeatable AI-assisted triage workflow — while articulat
   looks like). Not strictly required — Module 3 is self-contained — but assumed.
 - Python 3.10+ and `pip install -r common/requirements.txt` (the lab scripts themselves use
   only the standard library, so this is only needed for the wider repo).
-- Terminal access at the repo root: `/Users/drbae/BASE/evolve`.
+- Terminal access at the repo root.
 - **One** working model endpoint. Either path is fine (see Setup); the offline path needs no GPU.
 
 ## Setup (do this before students arrive)

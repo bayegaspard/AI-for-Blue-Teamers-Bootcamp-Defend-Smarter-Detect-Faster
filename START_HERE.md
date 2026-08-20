@@ -5,13 +5,15 @@ run first and links every lab in order. Total course: 5 days, 2 hours per day.
 
 ---
 
-## Step 1 - Open a terminal at the repo root
+## Step 1 - Get the code and open a terminal in it
 
-The repo root is the folder that contains `common/`, `datasets/`, `scripts/`, and the
-`module1..5` folders.
+Clone the repository (or unzip the archive your instructor shared), then move into the
+folder it creates. The repo root is the folder that contains `common/`, `datasets/`,
+`scripts/`, and the `module1..5` folders.
 
 ```bash
-cd /Users/drbae/BASE/evolve
+git clone <REPO_URL>
+cd <the-folder-that-was-created>    # then run everything from here
 ```
 
 ## Step 2 - Create your config file (once)
@@ -40,9 +42,11 @@ Bring up the local stand-in stack, then point your config at it:
 ```bash
 scripts/lab_up.sh core
 ```
-Then edit `.env` and set:
+Then edit `.env` and set these two lines (the defaults point at the cyberlab GPU VM,
+so offline you switch both to the local mock):
 ```
 OLLAMA_HOST=http://localhost:11435
+AI_SOC_OLLAMA_HOST=http://mock-ollama:11434
 ```
 Now `python3 scripts/verify_env.py` will pass for Ollama, and the AI SOC assistant is
 live at http://localhost:8080. (Wazuh stays offline on this path; the labs give you a
