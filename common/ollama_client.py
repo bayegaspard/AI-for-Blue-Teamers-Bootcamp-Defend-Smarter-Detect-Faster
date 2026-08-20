@@ -37,16 +37,20 @@ def _load_env() -> None:
     except Exception:  # dotenv not installed: parse .env ourselves
         pass
     try:
-        with open(envpath, encoding="utf-8") as fh:
-            for line in fh:
-                line = line.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                k, v = line.split("=", 1)
-                v = v.strip().strip('"').strip("'")
-                os.environ.setdefault(k.strip(), v)
+        lines = open(envpath, encoding="utf-8").read().splitlines()
     except FileNotFoundError:
-        pass
+        return
+    preexisting = set(os.environ)  # real environment variables win over .env
+    for line in lines:
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        k, v = line.split("=", 1)
+        k = k.strip()
+        v = v.strip().strip('"').strip("'")
+        if k in preexisting:
+            continue
+        os.environ[k] = v  # within the file, a later line overrides an earlier duplicate
 
 
 _load_env()
