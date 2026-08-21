@@ -84,7 +84,12 @@ def validate_output(response: str, system: str) -> tuple[str, list[str]]:
 
 def extract_verdict(response: str) -> str:
     low = (response or "").lower()
-    for v in ALLOWED_VERDICTS:  # malicious/suspicious before benign so it does not shadow
+    # Prefer the model's explicit VERDICT line (handles markdown like **VERDICT**: benign),
+    # so a stray "suspicious activity" in the RECOMMENDED ACTION does not shadow the verdict.
+    m = re.search(r"verdict[\s*:_>()-]*\s*(malicious|suspicious|benign)", low)
+    if m:
+        return m.group(1)
+    for v in ALLOWED_VERDICTS:  # fallback: first verdict word anywhere
         if v in low:
             return v
     return "(none found)"

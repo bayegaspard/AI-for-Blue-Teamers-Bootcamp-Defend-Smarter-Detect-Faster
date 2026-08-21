@@ -37,10 +37,16 @@ INJECTION_PATTERNS = {
         r"classify .*as (benign|safe|clean)",
         r"this is (a )?(false positive|authorized|approved)",
         r"do not (raise|create) (an )?(alert|ticket)",
+        r"classif(y|ied) .{0,30}benign",
+        r"authorized (vulnerability )?scanner",
+        r"per runbook",
+        r"(reply|respond|output)\b[^\n]{0,60}benign",
     ],
     "leak_prompt": [
         r"(reveal|print|show|repeat|output).{0,30}(system prompt|your instructions|initial prompt)",
         r"what (are|were) your (instructions|rules)",
+        r"quote[^\n]{0,40}(instructions|output format)",
+        r"instructions and output format",
     ],
     "jailbreak": [
         r"you are now .*(dan|unrestricted|jailbroken|developer mode)",
