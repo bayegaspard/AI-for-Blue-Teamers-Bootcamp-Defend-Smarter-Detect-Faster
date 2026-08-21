@@ -17,18 +17,13 @@ What it does
 It is deliberately dependency-light (Python standard library only) and fails
 loudly-but-clearly when Ollama or Wazuh is down, so students always know what to fix.
 
-Run it
-------
-    # real cyberlab (Wazuh + GPU Ollama, from your .env):
-    python3 labs/triage_workflow.py
+Run it (from the repo root)
+---------------------------
+    # against the shared boxes (Wazuh + GPU Ollama, from your .env):
+    python3 module3-prompt-engineering/labs/triage_workflow.py
 
-    # portable / offline (local file + mock-ollama):
-    #   1) scripts/lab_up.sh core        # starts mock-ollama on host port 11435
-    #   2) set OLLAMA_HOST=http://localhost:11435 in .env
-    python3 labs/triage_workflow.py --source file --limit 5
-
-    # force the local file even if Wazuh is up (deterministic for class):
-    python3 labs/triage_workflow.py --source file
+    # use the bundled sample alerts instead of live Wazuh (a repeatable demo):
+    python3 module3-prompt-engineering/labs/triage_workflow.py --source file --limit 5
 """
 from __future__ import annotations
 

@@ -71,7 +71,7 @@ of other points (this mirrors the auto-grader's `ADVERSARIAL MISS` cap).
 **Grade bands:** 90-100 excellent · 80-89 strong · 70-79 pass · <70 revise & resubmit.
 
 **Cross-check with the auto-grader:** run
-`python3 labs/capstone_check.py submissions/<name>_report.md`. A large gap between the
+`python3 module5-capstone/labs/capstone_check.py module5-capstone/submissions/<name>_report.md`. A large gap between the
 automated total and your human total usually means the student pasted the right IPs
 without real analysis (auto high / human low) or wrote strong prose but forgot a
 required heading or IP string (human high / auto low). Investigate either way.

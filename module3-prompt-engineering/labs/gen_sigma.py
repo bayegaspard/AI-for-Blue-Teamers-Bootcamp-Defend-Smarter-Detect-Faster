@@ -13,13 +13,13 @@ IMPORTANT: the AI DRAFTS the rule; a detection engineer VERIFIES it. Always lint
 Run it
 ------
     # behavior as an argument:
-    python3 labs/gen_sigma.py "More than 10 failed SSH logins from one source IP in 60s, then a success from that IP."
+    python3 module3-prompt-engineering/labs/gen_sigma.py "More than 10 failed SSH logins from one source IP in 60s, then a success from that IP."
 
     # behavior from stdin:
-    echo "SQL injection UNION SELECT in an nginx access log URL" | python3 labs/gen_sigma.py --stdin
+    echo "SQL injection UNION SELECT in an nginx access log URL" | python3 module3-prompt-engineering/labs/gen_sigma.py --stdin
 
     # save the draft to a file to lint it:
-    python3 labs/gen_sigma.py "..." > /tmp/draft.yml
+    python3 module3-prompt-engineering/labs/gen_sigma.py "..." > /tmp/draft.yml
 """
 from __future__ import annotations
 

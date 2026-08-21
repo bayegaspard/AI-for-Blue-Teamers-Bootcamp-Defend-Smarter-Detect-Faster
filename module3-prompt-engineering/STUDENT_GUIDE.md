@@ -136,7 +136,7 @@ rule with [gen_sigma.py](labs/gen_sigma.py), then **validate it** like an engine
 
 ### Step 1 - Draft the rule
 ```
-python3 labs/gen_sigma.py "More than 10 failed SSH logins (Linux auth log) from a single source IP within 60 seconds, followed by a successful login from that same IP."
+python3 module3-prompt-engineering/labs/gen_sigma.py "More than 10 failed SSH logins (Linux auth log) from a single source IP within 60 seconds, followed by a successful login from that same IP."
 ```
 This fills the [sigma_generation.md](../common/prompts/sigma_generation.md) template, uses the
 **Detection Engineer** persona, and prints YAML.
@@ -171,7 +171,7 @@ level: high
 
 1. **Is it valid YAML?** Save and parse it - a syntax slip means it won't load:
    ```
-   python3 labs/gen_sigma.py "brute force then success from same IP" > /tmp/rule.yml
+   python3 module3-prompt-engineering/labs/gen_sigma.py "brute force then success from same IP" > /tmp/rule.yml
    python3 -c "import yaml,sys; yaml.safe_load(open('/tmp/rule.yml')); print('YAML OK')" 2>/dev/null \
      || python3 -c "print('No PyYAML? Eyeball the indentation instead - every nested key +2 spaces.')"
    ```
@@ -347,7 +347,7 @@ Rewrite the Lab 3.3 summary prompt so the model returns **only** a JSON object:
 Tips: state *"Output ONLY a single JSON object, no markdown, no commentary."*, give the exact
 key schema, set a low temperature, and **validate** it:
 ```
-python3 labs/triage_workflow.py --source file --show-raw 2>/dev/null   # inspect raw answers
+python3 module3-prompt-engineering/labs/triage_workflow.py --source file --show-raw 2>/dev/null   # inspect raw answers
 # then pipe a single answer through:  python3 -c "import json,sys;print(json.load(sys.stdin))"
 ```
 Success = `json.load()` parses it with **zero** hand-editing. (Real LLMs love to wrap JSON in
