@@ -4,7 +4,7 @@ Hands-on lab package for the 5-day bootcamp delivered by **Valix AI (Dr. Gaspard
 for **Evolve Academy**. Built to run against the existing cyberlab (Ollama GPU VM +
 Wazuh SIEM) **and** on any laptop with just Docker - no GPU or VPN required.
 
-> Maps 1:1 to the signed Statement of Work. 5 days × 2 hours. Each day is a self-contained
+> 5 days × 2 hours. Each day is a self-contained
 > module with an instructor guide, a step-by-step student guide, runnable labs, and solutions.
 
 > **New here? Open [START_HERE.md](START_HERE.md)** - it tells you exactly what to run first

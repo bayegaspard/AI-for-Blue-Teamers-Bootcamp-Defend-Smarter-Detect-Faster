@@ -80,4 +80,4 @@ RECOMMENDED ACTION: block the source IP, confirm no successful login followed, r
 
 ## If you're short on time
 
-Cut in this order: shorten **1.4** to an instructor demo → assign the **challenges** as homework → keep **1.2** and **1.3** intact. Never cut Lab 1.3; it *is* the SoW outcome (*participants understand how AI integrates into modern SOC environments*) made concrete.
+Cut in this order: shorten **1.4** to an instructor demo → assign the **challenges** as homework → keep **1.2** and **1.3** intact. Never cut Lab 1.3; it *is* the module outcome (*participants understand how AI integrates into modern SOC environments*) made concrete.

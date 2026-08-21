@@ -15,9 +15,9 @@ bridge into Module 3.
 
 ---
 
-## SoW mapping - what this module delivers
+## Module objectives - what this module delivers
 
-| SoW Module 2 bullet | Where it is taught | Student proof-of-skill |
+| Objective | Where it is taught | Student proof-of-skill |
 |---|---|---|
 | Traffic analysis & log monitoring | Labs 2.1-2.3 | Reads `auth.log` / `access.log`, watches live Wazuh alerts |
 | Attack signatures & behavioral patterns | Lab 2.3 (signatures) + Lab 2.4 (behavioral/rate) | Explains signature vs. rate-based detection; runs both detectors |
@@ -35,14 +35,14 @@ job of a Tier-1 SOC analyst.*
 
 | Time | Min | Segment | Instructor focus |
 |---|---|---|---|
-| 0:00-0:10 | 10 | **Intro & recap** | Recap Module 1 (AI + SOC basics). State objectives + SoW outcome. Signature vs. behavioral detection in one slide. |
+| 0:00-0:10 | 10 | **Intro & recap** | Recap Module 1 (AI + SOC basics). State the objectives and outcome. Signature vs. behavioral detection in one slide. |
 | 0:10-0:25 | 15 | **Lab 2.1 - Stand up the range** | `scripts/lab_up.sh targets attack`; confirm services with `recon_nmap.sh`. Fix Docker/VPN issues here so later labs flow. |
 | 0:25-0:45 | 20 | **Lab 2.2 - SSH brute force** | Run the attack; watch Wazuh rules 5710/5712/**100120** (real) or `docker logs` (offline). Emphasize "many failures/short window". |
 | 0:45-1:05 | 20 | **Lab 2.3 - Web attacks** | SQLi auth-bypass (200 vs 401) + web brute force. Wazuh rule **100101**. Show the injection string *in the log*. |
 | 1:05-1:10 | 5 | **Break** | - |
 | 1:10-1:35 | 25 | **Lab 2.4 - Parse & correlate** | Students run [`detect_bruteforce.py`](labs/detect_bruteforce.py) + [`detect_web_attacks.py`](labs/detect_web_attacks.py); correlate IPs with the threat feed. Peak teaching moment: the *hidden successful login*. |
 | 1:35-1:55 | 20 | **Lab 2.5 - AI-assisted detection** | Feed captured logs to Ollama with the [log-triage prompt](../common/prompts/log_triage.md). Compare AI output to their own findings. Bridge to Module 3. |
-| 1:55-2:00 | 5 | **Wrap-up** | Review the 3 challenges, restate SoW outcome, preview Module 3 (prompt engineering for defense). |
+| 1:55-2:00 | 5 | **Wrap-up** | Review the 3 challenges, restate the outcome, preview Module 3 (prompt engineering for defense). |
 
 ---
 

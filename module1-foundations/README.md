@@ -7,11 +7,11 @@
 
 ---
 
-## Where this fits in the Statement of Work
+## Module objectives
 
-This module delivers **SoW Module 1**. Every SoW bullet maps to a concrete lab:
+This module delivers the Module 1 objectives. Every objective maps to a concrete lab:
 
-| SoW Module 1 bullet | Delivered by |
+| Objective | Delivered by |
 | --- | --- |
 | Overview of AI tools in cybersecurity | Live intro + **Lab 1.2** (first AI conversation for security) |
 | How SOC analysts leverage AI for **log analysis** | **Lab 1.3** (AI-assisted log triage of `datasets/auth.log`) |
@@ -19,7 +19,7 @@ This module delivers **SoW Module 1**. Every SoW bullet maps to a concrete lab:
 | How SOC analysts leverage AI for **IR workflows** | Live discussion of the triage → ticket → response loop; sets up Modules 2 & 5 |
 | AI-assisted automation | **Lab 1.3** starter script `first_ai_triage.py` (a repeatable, scriptable triage step) |
 
-**SoW outcome for this module:** *"Participants understand how AI integrates into modern SOC environments."*
+**Outcome for this module:** *"Participants understand how AI integrates into modern SOC environments."*
 By the end of Day 1 a student can: point a script or CLI at a local LLM, get a **structured** triage verdict from raw logs, read a SIEM's alert stream, and articulate where the human stays in the loop. That is the mental model the rest of the week builds on.
 
 ---
@@ -94,7 +94,7 @@ The `mock-ollama` is a deterministic, GPU-free stand-in. It returns **malicious*
 | 0:50-0:55 | **Break / buffer** | - | Also a catch-up window for anyone still on Lab 1.1. |
 | 0:55-1:25 | **Lab 1.3 - AI-assisted log triage** | Hands-on | The centerpiece. Pipe `auth.log` through the model; read the structured verdict; run the starter script. |
 | 1:25-1:50 | **Lab 1.4 - Meet the SIEM** | Hands-on + demo | Guided Wazuh dashboard tour; pull alerts with the CLI. Connect "logs → alerts → AI summary." |
-| 1:50-2:00 | **Wrap-up + mini-challenges + preview** | Live | Debrief the 3 challenges, restate the SoW outcome, tease Module 2 (detection engineering). |
+| 1:50-2:00 | **Wrap-up + mini-challenges + preview** | Live | Debrief the 3 challenges, restate the outcome, tease Module 2 (detection engineering). |
 
 Timeboxing tip: Labs 1.2 and 1.3 are where the learning is. If you're behind, compress the Wazuh tour (1.4) to a demo and assign the challenges as homework - do **not** cut Lab 1.3.
 
@@ -146,4 +146,4 @@ A student finishing Module 1 can, unprompted:
 - open Wazuh (or view the CLI alert stream) and name what an agent, an alert, and a rule level are,
 - and say, in one sentence, **where the human stays in the loop.**
 
-That is the SoW outcome: *participants understand how AI integrates into modern SOC environments.*
+That is the outcome: *participants understand how AI integrates into modern SOC environments.*

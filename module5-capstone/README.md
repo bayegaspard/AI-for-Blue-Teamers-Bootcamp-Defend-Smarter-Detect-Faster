@@ -5,13 +5,13 @@ completed Modules 1-4. This is the graded capstone.
 
 ---
 
-## 1. Where this sits in the Statement of Work
+## 1. Module objectives
 
 Module 5 is the **capstone** of the "AI Blue Team & Intro to AI Red Teaming"
 bootcamp. It consolidates everything from Days 1-4 into one realistic incident that
 students work end-to-end:
 
-| SoW learning outcome (Module 5) | How this capstone delivers it |
+| Learning outcome | How this capstone delivers it |
 |---|---|
 | Run the full incident lifecycle: **Detection → Analysis → Response → Reporting** | Tasks 1→4 of the worksheet mirror the four phases exactly. |
 | **Apply AI tools across the workflow** | Students triage with the AI SOC assistant, correlate with an AI prompt, and draft the report with the IR prompt. |

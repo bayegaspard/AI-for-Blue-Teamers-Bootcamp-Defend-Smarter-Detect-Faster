@@ -13,15 +13,15 @@
 
 ---
 
-## Where this maps to the Statement of Work
+## Module objectives
 
-| SoW Module 4 bullet | Covered by |
+| Objective | Covered by |
 | --- | --- |
 | Prompt injection attacks & misuse | Lab 4.1 (direct), Lab 4.3 (indirect), [`labs/payloads.md`](labs/payloads.md) |
 | Model manipulation techniques & limitations | Lab 4.2 (system-prompt extraction, jailbreak concept); "limitations" = why an LLM can't tell instructions from data |
 | Risks of AI in security environments | Lab 4.3 threat model (poisoned telemetry → analyst's AI), Lab 4.5 risk register |
 | Defensive strategies against AI abuse & adversarial inputs | Lab 4.4 (isolation + sanitization + output validation) and the blue-team detection (Wazuh rule 100110) |
-| **SoW outcome:** "attacker mindset + secure AI-driven systems" | Students run the attack *and* ship the fix; Lab 4.5 mitigation checklist is their takeaway artifact |
+| **Outcome:** "attacker mindset + secure AI-driven systems" | Students run the attack *and* ship the fix; Lab 4.5 mitigation checklist is their takeaway artifact |
 
 **Outcome statement for the report-out:** *Participants can adopt an attacker's
 mindset against LLM-powered tooling and build AI-driven systems that resist

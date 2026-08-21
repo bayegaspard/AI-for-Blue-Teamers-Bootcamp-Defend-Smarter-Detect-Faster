@@ -7,10 +7,10 @@
 
 ---
 
-## Where this maps to the Statement of Work
-This module delivers the SoW "Module 3" bullets:
+## Module objectives
+This module delivers the Module 3 objectives:
 
-| SoW bullet | Delivered by |
+| Objective | Delivered by |
 |------------|--------------|
 | Fundamentals of prompt engineering for cybersecurity | Lab 3.1 (the 6 principles: Role, Ground, Structure, Constrain, Verify, Never-trust-data) |
 | Using AI to analyze threats & summarize incidents | Lab 3.1 (log triage) + Lab 3.3 (alert summary + IR report) |
@@ -18,7 +18,7 @@ This module delivers the SoW "Module 3" bullets:
 | Automating reporting & documentation | Lab 3.3 ([ir_report.md](../common/prompts/ir_report.md) template) |
 | Building efficient AI-assisted SOC workflows | Lab 3.4 ([triage_workflow.py](labs/triage_workflow.py), batch triage table) |
 
-**SoW outcome for the day:** each student can write a structured security prompt from
+**Outcome for the day:** each student can write a structured security prompt from
 scratch, generate and *validate* a Sigma rule, auto-draft an incident summary/report from a
 real alert, and run a repeatable AI-assisted triage workflow - while articulating the limits
 ("AI drafts, analyst decides") that keep it safe in a real SOC.
