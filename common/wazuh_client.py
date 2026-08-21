@@ -192,7 +192,16 @@ def _cli(argv: list[str]) -> int:
                 print(f"{a.get('id'):>4}  {a.get('name'):<20} {a.get('ip','-'):<16} {a.get('status')}")
             return 0
         if args.alerts is not None:
-            for a in wz.recent_alerts(limit=args.alerts, min_level=args.min_level):
+            alerts = wz.recent_alerts(limit=args.alerts, min_level=args.min_level)
+            if not alerts:
+                print(f"[i] No alerts found at rule.level >= {args.min_level}.")
+                if args.min_level > 0:
+                    print("    Try a lower threshold:  --alerts 40 --min-level 0")
+                print("    If still empty, no attack telemetry has been generated yet. The"
+                      " instructor runs scripts/generate_wazuh_telemetry.sh; the capstone"
+                      " evidence is also in datasets/ (auth.log, access.log, poisoned.log).")
+                return 0
+            for a in alerts:
                 rule = a.get("rule", {})
                 print(f"[L{rule.get('level','?'):>2}] {a.get('timestamp','')[:19]}  "
                       f"{rule.get('description','(no desc)')}")

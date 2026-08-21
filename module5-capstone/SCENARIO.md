@@ -37,7 +37,7 @@ from your workstation:
 # from the repo root, with .env pointed at the cyberlab
 python3 common/wazuh_client.py --health
 python3 common/wazuh_client.py --alerts 40                 # everything recent
-python3 common/wazuh_client.py --alerts 40 --min-level 10  # just the loud stuff
+python3 common/wazuh_client.py --alerts 40 --min-level 5   # medium severity and up
 ```
 
 The AI runs against the GPU VM (`llama3.1:8b`) directly, no Docker: use the shared

@@ -60,7 +60,7 @@ fallback that needs Docker.
   [`docker/wazuh-agent/local_rules.xml`](../docker/wazuh-agent/local_rules.xml).
 - Generate the telemetry live from the attacker container **before class** (or as a
   live demo) - commands are in [`SCENARIO.md` §3](SCENARIO.md). Confirm the alerts
-  appear: `python3 common/wazuh_client.py --alerts 40 --min-level 10`.
+  appear: `python3 common/wazuh_client.py --alerts 40 --min-level 5`.
 
 ### Path B - Optional: offline fallback (needs Docker)
 ```bash

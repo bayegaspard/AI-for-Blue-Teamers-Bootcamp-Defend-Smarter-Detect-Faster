@@ -24,22 +24,10 @@ python3 scripts/verify_env.py
 
 You have overnight telemetry. Find every source that misbehaved and rank it.
 
-### 1a. Pull the alerts / logs
+### 1a. Pull the evidence
 
-**Real cyberlab:**
-```bash
-python3 common/wazuh_client.py --alerts 40 --min-level 10
-```
-**Expected output** (order/timestamps vary) - you should see high-level alerts like:
-```
-[L12] 2026-08-10T03:11:...  Bootcamp: SSH brute force burst (>=8 failures/60s) from one source
-[L12] 2026-08-10T03:20:...  Bootcamp: SQL injection pattern in web traffic
-[L10] 2026-08-10T03:20:...  Bootcamp: Path traversal attempt in web request
-[L12] 2026-08-10T04:15:...  Bootcamp: Possible PROMPT-INJECTION payload detected in log data
-```
-
-**Portable/offline:** read the captured logs directly and run the Module 2 detector
-against the SSH log:
+The incident evidence is in the bundled logs, so this always works. Start with the SSH log
+and the Module 2 detector:
 ```bash
 python3 module2-detection/labs/detect_bruteforce.py datasets/auth.log
 ```
@@ -54,6 +42,15 @@ python3 module2-detection/labs/detect_bruteforce.py datasets/auth.log
       THREAT INTEL MATCH  -> Known SSH brute-force source (internal threat feed) [severity=high]
       !! SUCCESSFUL LOGIN -> account 'admin' authenticated from this IP after the failures (likely compromised).
 ```
+
+**Optional - live Wazuh** (only if your instructor generated telemetry into the shared
+Wazuh; otherwise this is empty and the datasets are your source of record):
+```bash
+python3 common/wazuh_client.py --alerts 40 --min-level 5
+```
+If it returns rows you will see high-level alerts such as the SSH brute-force burst
+(rule 100120) and, if web telemetry was generated, the SQLi pattern (100101). Empty output
+just means no attacks have been run against a monitored host yet - continue with the datasets.
 
 ### 1b. Read the web log by eye
 
