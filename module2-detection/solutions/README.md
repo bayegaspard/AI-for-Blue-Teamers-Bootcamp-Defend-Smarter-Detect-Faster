@@ -31,13 +31,19 @@ python3 module2-detection/labs/detect_web_attacks.py   # flags SQLi + traversal 
 
 Students have no SSH to the boxes, so you populate the shared Wazuh. Two simple options:
 
-1. Self-monitored manager: the Wazuh all-in-one monitors its own host, so an SSH
-   brute force against the Wazuh VM's own sshd raises 5710 / 5712 and, past the
-   threshold, 100120. Run it from a host you control (for example the dockerized attacker
-   `attack_ssh_bruteforce.sh <wazuh-ip> <user>`), then confirm in the dashboard.
+1. Self-monitored manager (simplest, no Docker): the Wazuh all-in-one monitors its own
+   host, so an SSH brute force against the Wazuh VM's own sshd raises 5710 / 5712 and,
+   past the threshold, 100120. Use the bundled helper from any Linux box that can reach
+   the target:
+   ```bash
+   sudo apt-get install -y sshpass                      # one-time
+   bash scripts/generate_wazuh_telemetry.sh 10.50.136.116
+   python3 common/wazuh_client.py --alerts 30 --min-level 5   # confirm they landed
+   ```
 2. Enrolled endpoint: enroll a Wazuh agent on a disposable Linux endpoint (or the GPU
-   VM), point it at 10.50.136.116 (see docker/wazuh-agent/README.md), then run the SSH and
-   web brute force plus the SQLi requests against it.
+   VM), point it at 10.50.136.116 (see docker/wazuh-agent/README.md), then run the same
+   helper with a web port to also send SQLi/traversal:
+   `bash scripts/generate_wazuh_telemetry.sh <endpoint-ip> 8081`.
 
 Load the custom rules on the manager first (SETUP.md): local_rules.xml adds 100101,
 100110, 100120. After generating attacks, students will see them in Lab 2.1.
