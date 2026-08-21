@@ -74,7 +74,7 @@ class OllamaError(RuntimeError):
 class OllamaClient:
     """Minimal Ollama client using only the Python standard library."""
 
-    def __init__(self, host: str | None = None, model: str | None = None, timeout: int = 120):
+    def __init__(self, host: str | None = None, model: str | None = None, timeout: int = 300):
         self.host = (host or DEFAULT_HOST).rstrip("/")
         self.model = model or DEFAULT_MODEL
         self.timeout = timeout
@@ -87,7 +87,21 @@ class OllamaClient:
         try:
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:
                 return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.URLError as e:  # connection refused, timeout, DNS...
+        except TimeoutError as e:
+            raise OllamaError(
+                f"Ollama at {self.host} did not answer within {self.timeout}s. On first use "
+                "the model loads into memory - retry once (it stays warm for a few minutes). "
+                "If it keeps timing out, the GPU VM may be running on CPU: check `ollama ps` "
+                "(PROCESSOR should say GPU) and `nvidia-smi` on the GPU VM."
+            ) from e
+        except urllib.error.URLError as e:  # connection refused, DNS, etc.
+            reason = getattr(e, "reason", e)
+            if isinstance(reason, TimeoutError):
+                raise OllamaError(
+                    f"Ollama at {self.host} timed out after {self.timeout}s (model loading on "
+                    "first use, or the GPU VM is on CPU). Retry once; if it persists check "
+                    "`ollama ps` and `nvidia-smi` on the GPU VM."
+                ) from e
             raise OllamaError(
                 f"Could not reach Ollama at {self.host}. "
                 f"Is OLLAMA_HOST correct and reachable? Underlying error: {e}"
@@ -100,7 +114,7 @@ class OllamaClient:
         try:
             with urllib.request.urlopen(url, timeout=10) as resp:
                 return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.URLError as e:
+        except (urllib.error.URLError, TimeoutError) as e:
             raise OllamaError(f"Ollama not reachable at {self.host}: {e}") from e
 
     def generate(self, prompt: str, system: str | None = SOC_SYSTEM_PROMPT,
@@ -149,7 +163,7 @@ class OllamaClient:
                         yield obj["response"]
                     if obj.get("done"):
                         break
-        except urllib.error.URLError as e:
+        except (urllib.error.URLError, TimeoutError) as e:
             raise OllamaError(f"Stream failed against {self.host}: {e}") from e
 
 
@@ -164,11 +178,12 @@ def _cli(argv: list[str]) -> int:
     p.add_argument("--model", default=DEFAULT_MODEL)
     p.add_argument("--host", default=DEFAULT_HOST)
     p.add_argument("--temp", type=float, default=0.2)
+    p.add_argument("--timeout", type=int, default=300, help="Request timeout in seconds.")
     p.add_argument("--stream", action="store_true", help="Stream the output.")
     p.add_argument("--health", action="store_true", help="Check server + list models.")
     args = p.parse_args(argv)
 
-    client = OllamaClient(host=args.host, model=args.model)
+    client = OllamaClient(host=args.host, model=args.model, timeout=args.timeout)
 
     if args.health:
         try:
