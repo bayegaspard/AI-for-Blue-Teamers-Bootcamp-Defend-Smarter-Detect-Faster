@@ -4,8 +4,13 @@ The lab runs directly against the shared GPU model (no Docker). Reproduce any li
 ```bash
 python3 module4-red-teaming/labs/inject.py --payload <name> --mode <vulnerable|hardened>
 ```
-On the real llama3.1:8b the wording varies, but the attack-succeeds / defense-holds
-outcome is the same. The Assessment line is the read-out to grade on.
+On the real llama3.1:8b, the BLATANT payloads (`verdict-flip`, `prompt-leak`, `jailbreak`,
+`indirect-ua`, `indirect-ssh`) are frequently REFUSED by the model's safety training even
+in vulnerable mode - that refusal is itself a defense layer worth naming in class. Use the
+SUBTLE payloads for the real-model demo (no trigger words, they land more often):
+`authorized-scanner` and `format-only` (verdict flip) and `audit-leak` (system-prompt
+leak). Results are nondeterministic - retry a few times. The deterministic offline mock
+reproduces the whole table every run. The Assessment line is the read-out to grade on.
 
 ## Expected Assessment per payload
 
