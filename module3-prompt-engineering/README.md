@@ -31,21 +31,20 @@ real alert, and run a repeatable AI-assisted triage workflow - while articulatin
 - Python 3.10+ and `pip install -r common/requirements.txt` (the lab scripts themselves use
   only the standard library, so this is only needed for the wider repo).
 - Terminal access at the repo root.
-- **One** working model endpoint. Either path is fine (see Setup); the offline path needs no GPU.
+- The shared GPU model reachable (the student path; no Docker).
 
 ## Setup (do this before students arrive)
-Run the smoke test and confirm at least one Ollama path is green:
+Students run against the two shared boxes over the VPN. Confirm the model answers and
+dry-run the capstone lab:
 ```
-scripts/smoke_test.sh            # optional: whole-repo check
-python3 common/ollama_client.py --health
-python3 module3-prompt-engineering/labs/triage_workflow.py --source file   # dry-run the capstone lab
+python3 scripts/verify_env.py
+python3 module3-prompt-engineering/labs/triage_workflow.py --source file   # dry-run the workflow
 ```
-- **Real cyberlab:** confirm the GPU VM (`http://10.50.142.235:11434`) answers and, if you want
-  live alerts in Lab 3.4, paste the real `WAZUH_PASS`/`WAZUH_INDEXER_PASS` into [.env](../.env).
-- **Portable/offline (recommended default for a classroom):** `scripts/lab_up.sh core` starts the
-  GPU-free `mock-ollama` on host port **11435**; set `OLLAMA_HOST=http://localhost:11435` in `.env`.
-  Everything below runs identically. The mock is **deterministic**, so the checkpoints in the
-  student guide are reproducible - ideal when you can't rely on GPU/VPN in the room.
+- Confirm the GPU VM (`http://10.50.142.235:11434`) answers, and if you want live alerts in
+  Lab 3.4 paste the real `WAZUH_PASS`/`WAZUH_INDEXER_PASS` into [.env](../.env) (otherwise the
+  workflow uses the bundled sample alerts).
+- Optional deterministic demo (needs Docker): `scripts/lab_up.sh core` starts the GPU-free
+  `mock-ollama` on port **11435**; set `OLLAMA_HOST=http://localhost:11435` in `.env`.
 
 > **Recommended teaching setup:** run the mock on the projector machine so demos never stall on
 > model latency or randomness, and let students who *have* GPU/VPN use the real 8B model to feel
@@ -85,8 +84,8 @@ cuts - assign them as take-home. Never cut Lab 3.2's validation half or the Lab 
   spend more than 30 seconds here today.
 
 ## Common pitfalls (and the fix)
-- **`[FAIL] Ollama not reachable`** → wrong `OLLAMA_HOST`, VPN down, or `scripts/lab_up.sh core`
-  not finished. The scripts print the exact fix; have students read the error, not panic.
+- **`[FAIL] Ollama not reachable`** → VPN down or wrong `OLLAMA_HOST`. Run
+  `python3 scripts/verify_env.py`; it prints the exact fix. Have students read the error, not panic.
 - **Offline mock looks "too clever" / too uniform.** Expected - it's a rule-based stand-in that
   always returns tidy structure. Tell students the *variability and rambling* of a real model is
   precisely why structured prompts matter; don't let them conclude "the AI is always this clean."
@@ -127,10 +126,9 @@ Shared assets this module reuses (do not edit here): the prompt templates in
 
 ## Instructor quick-verify (paste-and-go)
 ```
-# from repo root, offline path:
-scripts/lab_up.sh core && sed -i '' 's#^OLLAMA_HOST=.*#OLLAMA_HOST=http://localhost:11435#' .env
-python3 common/ollama_client.py --health
+# from the repo root, against the shared boxes:
+python3 scripts/verify_env.py
 python3 module3-prompt-engineering/labs/gen_sigma.py "brute force then success from same IP"
 python3 module3-prompt-engineering/labs/triage_workflow.py --source file
 ```
-All three should succeed (health OK, a YAML rule prints, a 2-row triage table prints).
+All three should succeed (env green, a YAML rule prints, a 2-row triage table prints).

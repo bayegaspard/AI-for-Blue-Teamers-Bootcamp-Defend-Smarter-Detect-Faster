@@ -65,7 +65,7 @@ level: high
 ```
 
 **Validation talking points**
-- Valid YAML (parses), has `title`/`logsource`/`detection`/`condition`/`level`. ✅
+- Valid YAML (parses), has `title`/`logsource`/`detection`/`condition`/`level`.
 - The correlation the model most often botches: tying failures **and** success to the **same**
   `src_ip`, plus the `> 10` threshold and `timeframe`. Make students find/add these.
 - Would it fire on [../../datasets/auth.log](../../datasets/auth.log)? The dataset shows ~7

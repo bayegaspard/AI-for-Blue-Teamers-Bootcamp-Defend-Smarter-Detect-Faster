@@ -114,7 +114,7 @@ def main(argv: list[str]) -> int:
     print("----- AI TRIAGE RESULT ------------------------------------------------")
     print(verdict.strip())
     print("-----------------------------------------------------------------------")
-    print("\n[✓] Done. Remember: the AI is a co-pilot. A human confirms the verdict.")
+    print("\n[OK] Done. Remember: the AI is a co-pilot. A human confirms the verdict.")
     return 0
 
 

@@ -29,7 +29,7 @@ By the end of Day 1 a student can: point a script or CLI at a local LLM, get a *
 By the end of this module, participants can:
 
 1. **Explain the AI-in-the-SOC landscape** - what LLMs are good at (summarizing, triaging, drafting), what they are *not* (ground truth, decisions), and why we run a **local** model (`llama3.1:8b`) instead of a public chatbot for sensitive logs.
-2. **Verify a working lab environment** - Ollama (LLM) and Wazuh (SIEM) reachable, using either the real cyberlab VMs or the portable Docker fallback.
+2. **Verify a working lab environment** - the shared Ollama (LLM) and Wazuh (SIEM) reachable over the VPN.
 3. **Prompt an LLM for a security task** using a deliberate **system persona** (the "SOC Analyst Assistant") and understand why the persona changes the output.
 4. **Run an AI-assisted log-triage** pass over real SSH auth logs and read the structured verdict (SUMMARY / VERDICT / CONFIDENCE / INDICATORS / RECOMMENDED ACTION).
 5. **Navigate a SIEM (Wazuh)** dashboard and pull alerts programmatically - the raw material the AI will summarize in later modules.
@@ -42,7 +42,7 @@ By the end of this module, participants can:
 **For students:**
 - Comfort with a terminal (cd, run a command, edit a file).
 - Basic idea of what an SSH login and a web request are. No ML background needed.
-- Their student VM (SSH/API access to the cyberlab) **or** a laptop with Docker for the portable path.
+- Their student VM with VPN access to the two shared boxes. No Docker needed.
 
 **Already provisioned (shared infrastructure - do not rebuild):**
 - **GPU VM** - Ollama serving `llama3.1:8b` at `http://10.50.142.235:11434` (Tesla T4).
@@ -55,32 +55,27 @@ By the end of this module, participants can:
    ```bash
    python3 scripts/verify_env.py
    ```
-3. Bring up the portable stack once so it's warm and image-built, in case the VPN/GPU is flaky during class:
-   ```bash
-   scripts/lab_up.sh core
-   ```
-4. Skim [`common/prompts/log_triage.md`](../common/prompts/log_triage.md) and [`common/prompts/system_prompts.md`](../common/prompts/system_prompts.md) - these are the two artifacts you'll refer to on the whiteboard.
+3. Warm the model with one call so the first student request is not slow:
+   `python3 common/ollama_client.py "hello"`.
+4. Skim [`common/prompts/log_triage.md`](../common/prompts/log_triage.md) and [`common/prompts/system_prompts.md`](../common/prompts/system_prompts.md) - the two artifacts you'll refer to on the whiteboard.
 
 ---
 
-## Setup commands (either path works, unchanged)
+## Setup commands
 
-**Real cyberlab (VMs + GPU):** ensure `.env` has
+Students run against the two shared boxes (no Docker). Ensure `.env` has:
 ```
 OLLAMA_HOST=http://10.50.142.235:11434
 WAZUH_API=https://10.50.136.116:55000
 WAZUH_INDEXER=https://10.50.136.116:9200
 ```
-Then `python3 scripts/verify_env.py` should report two PASS lines.
+(plus the real `WAZUH_PASS` / `WAZUH_INDEXER_PASS` from `scripts/get_wazuh_creds.sh`). Then
+`python3 scripts/verify_env.py` should report Ollama and Wazuh green.
 
-**Portable / offline (any laptop, no GPU, no VPN):**
-```bash
-scripts/lab_up.sh core                       # starts mock-ollama + ai-soc-assistant
-# then edit .env:
-#   OLLAMA_HOST=http://localhost:11435
-python3 common/ollama_client.py --health      # should list llama3.1:8b
-```
-The `mock-ollama` is a deterministic, GPU-free stand-in. It returns **malicious** for brute-force/SQLi-shaped logs and **benign** otherwise, so every AI lab behaves identically to the real GPU. Wazuh has no offline stand-in - on the portable path, do Lab 1.4's dashboard tour as an instructor-led screen-share and let students still run the CLI against the VM if they have API reachability; if not, use the sample alert output in the solutions key.
+Optional offline fallback (needs Docker, for practicing without VPN): `scripts/lab_up.sh core`
+starts a deterministic GPU-free `mock-ollama`; set `OLLAMA_HOST=http://localhost:11435` in `.env`.
+Wazuh has no offline stand-in, so on that path do Lab 1.4 as an instructor screen-share or use
+the sample alert output in the solutions key.
 
 ---
 
@@ -89,7 +84,7 @@ The `mock-ollama` is a deterministic, GPU-free stand-in. It returns **malicious*
 | Time | Segment | Format | Notes |
 | ---: | --- | --- | --- |
 | 0:00-0:15 | **Welcome + the big picture** | Live | Why AI in the SOC now; the "AI drafts, human decides" rule; tour the repo (`common/`, `datasets/`, `scripts/`). Set expectations: local model, not ChatGPT. |
-| 0:15-0:30 | **Lab 1.1 - Environment check** | Hands-on | Everyone gets two PASS lines. Triage stragglers to the portable path early - this is the #1 time sink. |
+| 0:15-0:30 | **Lab 1.1 - Environment check** | Hands-on | Everyone gets Ollama + Wazuh green. Fix VPN / `.env` / creds stragglers early - this is the #1 time sink. |
 | 0:30-0:50 | **Lab 1.2 - First AI conversation for security** | Hands-on | Ask the model security questions. Introduce the **system persona** and show how it changes answers. |
 | 0:50-0:55 | **Break / buffer** | - | Also a catch-up window for anyone still on Lab 1.1. |
 | 0:55-1:25 | **Lab 1.3 - AI-assisted log triage** | Hands-on | The centerpiece. Pipe `auth.log` through the model; read the structured verdict; run the starter script. |
@@ -116,7 +111,7 @@ Timeboxing tip: Labs 1.2 and 1.3 are where the learning is. If you're behind, co
 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
-| `verify_env.py` Ollama = FAIL | Not on VPN / wrong `OLLAMA_HOST` | Switch to portable path: `scripts/lab_up.sh core`, set `OLLAMA_HOST=http://localhost:11435`. |
+| `verify_env.py` Ollama = FAIL | Not on VPN / wrong `OLLAMA_HOST` | Check the VPN and `.env`; `python3 scripts/verify_env.py` prints the fix. (Offline fallback needs Docker: `scripts/lab_up.sh core` + `OLLAMA_HOST=http://localhost:11435`.) |
 | `verify_env.py` Wazuh = FAIL, "auth failed" | `WAZUH_PASS` still `CHANGE_ME` | Paste the real install-time password into `.env`. |
 | Wazuh FAIL, "unreachable" | No route to `10.50.136.116` | Confirm VPN/student-VM networking; Wazuh has no local mock - use instructor screen-share for the tour. |
 | `ModuleNotFoundError: common` | Ran a lab script from inside `labs/` without the boilerplate, or copied a snippet wrong | The provided scripts add the repo root to `sys.path`; run them as-is, e.g. `python3 module1-foundations/labs/first_ai_triage.py`. |

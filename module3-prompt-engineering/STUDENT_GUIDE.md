@@ -31,46 +31,30 @@ The reusable templates you'll use today live in [../common/prompts/](../common/p
 
 ---
 
-## Setup (5 minutes) - pick ONE path
+## Setup (2 minutes)
 
-You can do every lab on either the **real cyberlab** (GPU model + Wazuh) or the
-**portable/offline** stack (a GPU-free mock). The commands are identical; only your
-`.env` differs. Run everything from the **repo root** (the folder you cloned).
-
-### Path A - Real cyberlab
-Your [.env](../.env) already points at the GPU VM and Wazuh:
+Every lab runs against the two shared boxes over the VPN, no Docker. Your `.env` already
+points at the GPU model and Wazuh:
 ```
 OLLAMA_HOST=http://10.50.142.235:11434
 OLLAMA_MODEL=llama3.1:8b
 ```
-(Paste the real `WAZUH_PASS` / `WAZUH_INDEXER_PASS` if you want Lab 3.4 to pull live alerts.)
-
-### Path B - Portable / offline (no GPU, no VPN)
-Start the local mock model and point `.env` at it:
-```
-scripts/lab_up.sh core
-```
-Then edit [.env](../.env) so your laptop talks to the mock:
-```
-OLLAMA_HOST=http://localhost:11435
-```
-> The mock (`mock-ollama`) speaks just enough of the Ollama API that **every command
-> below runs unchanged**. It is a deterministic teaching stand-in, not a real LLM, so
-> its wording is fixed - great for reproducible checkpoints. On the real 8B model you
-> get richer, more variable prose.
+(Lab 3.4 can pull live alerts if `WAZUH_PASS` / `WAZUH_INDEXER_PASS` are set; otherwise it
+falls back to bundled sample alerts automatically.)
 
 ### Verify your setup
 ```
 python3 common/ollama_client.py --health
 ```
-**EXPECTED OUTPUT** (host differs by path):
+**EXPECTED OUTPUT:**
 ```
-[OK] Ollama reachable at http://localhost:11435
+[OK] Ollama reachable at http://10.50.142.235:11434
      Models available: llama3.1:8b
 ```
-### Checkpoint ✅
-You see `[OK] Ollama reachable ...` and at least one model listed. If you see `[FAIL]`,
-fix `OLLAMA_HOST` in `.env` (Path B: did `scripts/lab_up.sh core` finish?) before continuing.
+### Checkpoint
+You see `[OK] Ollama reachable ...` and the model listed. If you see `[FAIL]`, check your
+VPN and `OLLAMA_HOST` in `.env`, then run `python3 scripts/verify_env.py`. (Practicing at
+home with no VPN? An optional offline mode is in SETUP.md.)
 
 ---
 
@@ -97,8 +81,8 @@ python3 common/ollama_client.py \
 ask you follow-up questions, gives no verdict, no severity, no next step. Every run
 looks different. You can't paste this into a ticket.
 
-> On the offline mock the wording is canned, so this looks tidier than a real vague
-> answer would - trust the real-model behavior here: **vague in, vague out.**
+> On the real model a vague prompt gives a rambling, unstructured answer. The rule holds:
+> **vague in, vague out.**
 
 ### Step 3 - The GOOD prompt (all 6 principles)
 Now feed the whole block through the structured **log triage** template
@@ -121,7 +105,7 @@ LOG BLOCK:"
 - **Role** = the `--system` persona. **Ground** = "Use ONLY the data provided."
 - **Structure** = the numbered schema. **Constrain** = the fixed VERDICT/CONFIDENCE vocab.
 
-**EXPECTED OUTPUT (shape - offline mock is word-for-word this):**
+**EXPECTED OUTPUT (wording varies on the real model; the shape is stable):**
 ```
 SUMMARY: Repeated failed SSH authentications from a single source indicate a brute-force attempt.
 VERDICT: malicious
@@ -135,7 +119,7 @@ Put the two answers side by side. The good one has a **verdict, a severity/confi
 the exact indicators, and an action** - it is ticket-ready and *parseable by a script*.
 That parseability is what makes Lab 3.4 possible.
 
-### Checkpoint ✅
+### Checkpoint
 Your structured answer contains all five labelled fields (`SUMMARY`, `VERDICT`,
 `CONFIDENCE`, `INDICATORS`, `RECOMMENDED ACTION`) and the verdict is `malicious`.
 
@@ -201,7 +185,7 @@ level: high
 5. **Real tooling:** in a live environment you'd run `sigma check rule.yml` (from
    [SigmaHQ](https://github.com/SigmaHQ/sigma)) and convert it to a Wazuh/SIEM query before deploying.
 
-### Checkpoint ✅
+### Checkpoint
 You have a YAML rule that parses, contains `detection:` + `condition:`, and you can point
 to the **exact line** where the correlation logic is either correct or needs a human fix.
 
@@ -277,7 +261,7 @@ English ("An attacker guessed the admin password on web01…"); **TIMELINE** cit
 `03:11:02 → 03:11:41` window; **IMPACT** stays cautious ("a successful login occurred; no
 evidence yet of data access"). See a full worked example in [solutions/README.md](solutions/README.md).
 
-### Checkpoint ✅
+### Checkpoint
 Your summary has a `SEVERITY` that matches the rubric (level 10 = **high**) and lists the
 MITRE IDs from the alert. Your report's IMPACT section does **not** claim anything the
 evidence doesn't show (e.g., it must not say "data was exfiltrated").
@@ -301,7 +285,7 @@ Both paths use the same command. It tries Wazuh first and **falls back to the lo
 ```
 python3 module3-prompt-engineering/labs/triage_workflow.py --limit 5
 ```
-To force the deterministic local file (recommended for the offline path or a clean demo):
+To use the bundled sample alerts instead of live Wazuh (a clean, repeatable demo):
 ```
 python3 module3-prompt-engineering/labs/triage_workflow.py --source file
 ```
@@ -309,7 +293,7 @@ python3 module3-prompt-engineering/labs/triage_workflow.py --source file
 ```
 [i] Wazuh unavailable (WazuhError); falling back to the local sample file.
 [*] Source : local file (sample_alerts.json)  (2 alert(s))
-[*] Model  : llama3.1:8b @ http://localhost:11435   (available: llama3.1:8b)
+[*] Model  : llama3.1:8b @ http://10.50.142.235:11434   (available: llama3.1:8b)
 [*] Prompt : alert_summary + VERDICT   temp=0.2
 
 [1/2] Triaging: sshd: Multiple authentication failures followed by a successful ...
@@ -342,7 +326,7 @@ Open [triage_workflow.py](labs/triage_workflow.py) and find `ALERT_SUMMARY_PROMP
 (for example, add a line `- CONFIDENCE: low | medium | high`), re-run, and compare the table.
 **This is the core skill:** small prompt edits → different, more useful structured output.
 
-### Checkpoint ✅
+### Checkpoint
 You get a two-row table where the SQLi row is `critical` and the SSH row is `high`, both
 `malicious`, and each `NEXT_STEP` is a concrete action. If Wazuh is configured, try
 `--source wazuh --min-level 7` and confirm it pulls live alerts instead.

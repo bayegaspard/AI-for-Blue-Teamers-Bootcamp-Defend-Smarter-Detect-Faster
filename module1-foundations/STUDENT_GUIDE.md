@@ -6,18 +6,15 @@ Welcome to Day 1. Today you'll meet the two tools you'll use all week - a local 
 
 > **The one rule to remember:** *AI drafts, the human decides.* The model is a fast junior analyst that never sleeps. You still own the verdict.
 
-### Two paths - pick yours
+### What you connect to
 
-Every command below works on **both**. When it matters, we show both.
+You use the two shared cyberlab boxes over the VPN. There is nothing to install and no
+Docker needed: the AI runs on the GPU VM (Ollama at `10.50.142.235`) and the SIEM is the
+Wazuh VM (`10.50.136.116`). Your `.env` already points at both.
 
-- **Real cyberlab** - you're on the student VM / VPN, using the GPU and Wazuh VMs.
-- **Portable / offline** - any laptop with Docker, no GPU or VPN needed (uses the `mock-ollama` stand-in).
-
-**Before you start**, open a terminal at the **repo root** (the folder that contains `common/`, `datasets/`, `scripts/`):
-```bash
-cd path/to/repo      # the repo root
-```
-> If a command says `python` and your machine only has `python3`, just type `python3` instead.
+Open a terminal in the repo folder (the one that contains `common/`, `datasets/`,
+`scripts/`) and run everything from there. An optional offline mode, for practicing at
+home with no VPN, is noted at the end of this guide.
 
 ---
 
@@ -43,7 +40,8 @@ python3 scripts/verify_env.py
 ======================================================================
 ```
 
-If you see a `[FAIL]`, don't panic - jump to **Step 4 (portable fallback)** below.
+If you see a `[FAIL]`, check your VPN and `.env` (your instructor can recover the Wazuh
+credentials with `scripts/get_wazuh_creds.sh`). An optional offline fallback is in Step 4.
 
 ### Step 2 - Check each service individually
 
@@ -80,9 +78,10 @@ nvidia-smi
 ```
 That **Tesla T4** line is your GPU serving `llama3.1:8b`. (Don't have SSH to that VM? Skip this - it's just a peek behind the curtain.)
 
-### Step 4 - Portable / offline fallback (if anything FAILed, or you have no VPN)
+### Step 4 - Optional: offline fallback (no VPN, needs Docker)
 
-Start the local stack and point your tools at it:
+Only if you have no VPN and want to practice at home. Start the local stack and point
+your tools at it:
 
 ```bash
 scripts/lab_up.sh core
@@ -110,7 +109,7 @@ python3 common/ollama_client.py --health
      Models available: llama3.1:8b
 ```
 
-> **Checkpoint ✅** - You have at least one healthy Ollama (`--health` prints `[OK]`). On the real cyberlab you also have a healthy Wazuh. You're ready.
+> **Checkpoint** - You have at least one healthy Ollama (`--health` prints `[OK]`). On the real cyberlab you also have a healthy Wazuh. You're ready.
 
 ---
 
@@ -132,7 +131,7 @@ python3 common/ollama_client.py "Explain what SSH brute force looks like in auth
 - The dangerous tell: a 'Failed password' storm FOLLOWED BY an 'Accepted password' - the guess finally worked.
 ```
 
-> On the **portable/mock** path the model gives a shorter canned answer - that's expected. The point is the *interaction*, not the prose.
+> On the optional offline mock the answer is shorter and canned - that's expected; the point is the interaction, not the prose.
 
 ### Step 2 - See the persona in action
 
@@ -162,7 +161,7 @@ Swap the persona with an environment variable:
 SYSTEM="You are a detection engineer." module1-foundations/labs/ask_ai.sh "Give one idea for a Sigma rule that catches SSH brute force."
 ```
 
-> **Checkpoint ✅** - You've asked the model a security question, changed its behavior with a persona, and used `ask_ai.sh`. You now know the system prompt is a lever, not decoration.
+> **Checkpoint** - You've asked the model a security question, changed its behavior with a persona, and used `ask_ai.sh`. You now know the system prompt is a lever, not decoration.
 
 ---
 
@@ -207,13 +206,13 @@ Real automation lives in a script, not a one-off pipe. Run the provided starter 
 python3 module1-foundations/labs/first_ai_triage.py
 ```
 
-**Expected output (mock is exact; real 8B says the same thing in its own words):**
+**Expected output (wording varies on the real model; the shape is stable):**
 ```
 ======================================================================
  AI-assisted log triage  -  datasets/auth.log
 ======================================================================
 [*] Read 10 log lines.
-[*] Asking llama3.1:8b at http://localhost:11435 to triage the logs...
+[*] Asking llama3.1:8b at http://10.50.142.235:11434 to triage the logs...
 
 ----- AI TRIAGE RESULT ------------------------------------------------
 SUMMARY: Repeated failed SSH authentications from a single source indicate a brute-force attempt.
@@ -223,7 +222,7 @@ INDICATORS: multiple 'Failed password' events, same source IP, short time window
 RECOMMENDED ACTION: block the source IP, confirm no successful login followed, review the target account.
 -----------------------------------------------------------------------
 
-[✓] Done. Remember: the AI is a co-pilot. A human confirms the verdict.
+[OK] Done. Remember: the AI is a co-pilot. A human confirms the verdict.
 ```
 
 Notice **RECOMMENDED ACTION** literally tells you to *"confirm no successful login followed."* Now go do that yourself with your own eyes: line 9 is `Accepted password for admin from 10.10.10.5`. The brute force **worked**. That is the difference between reading the AI's output and *acting* on it.
@@ -236,7 +235,7 @@ python3 module1-foundations/labs/first_ai_triage.py datasets/access.log
 ```
 Try it and compare the verdict to `auth.log`.
 
-> **Checkpoint ✅** - You produced a structured triage verdict from raw logs with one command, read all five fields, and **verified the successful login yourself** instead of trusting the summary blindly.
+> **Checkpoint** - You produced a structured triage verdict from raw logs with one command, read all five fields, and **verified the successful login yourself** instead of trusting the summary blindly.
 
 ---
 
@@ -298,7 +297,7 @@ python3 common/wazuh_client.py --agents
  001  web01                10.20.30.5       active
 ```
 
-> **Checkpoint ✅** - You can open Wazuh (or read its alerts via CLI), and you can name the three core concepts: an **agent** (a monitored machine), an **alert** (a rule that fired on a log), and a **rule level** (its severity 0-15).
+> **Checkpoint** - You can open Wazuh (or read its alerts via CLI), and you can name the three core concepts: an **agent** (a monitored machine), an **alert** (a rule that fired on a log), and a **rule level** (its severity 0-15).
 
 ---
 

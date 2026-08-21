@@ -49,9 +49,10 @@ hardened AI SOC assistant).
 **Students need:** the repo cloned, Python 3, and a working `.env` (from Modules
 1-4). They do **not** need to install anything new.
 
-**You (instructor) choose one delivery path:**
+Students run against the two shared boxes (Path A). Path B is an optional offline
+fallback that needs Docker.
 
-### Path A - Real cyberlab
+### Path A - Shared boxes (default, no Docker)
 - GPU VM Ollama (`llama3.1:8b`) reachable at `http://10.50.142.235:11434`.
 - Wazuh 4.14 up (dashboard `https://10.50.136.116`, API `:55000`, indexer `:9200`)
   with custom rules **100101** (SQLi), **100110** (prompt-injection), **100120**
@@ -61,10 +62,10 @@ hardened AI SOC assistant).
   live demo) - commands are in [`SCENARIO.md` §3](SCENARIO.md). Confirm the alerts
   appear: `python3 common/wazuh_client.py --alerts 40 --min-level 10`.
 
-### Path B - Portable / offline (recommended default)
+### Path B - Optional: offline fallback (needs Docker)
 ```bash
-scripts/lab_up.sh core          # mock-ollama + ai-soc-assistant, no GPU needed
-# students set OLLAMA_HOST=http://localhost:11435 in their .env
+scripts/lab_up.sh core          # mock-ollama, no GPU needed
+# then set OLLAMA_HOST=http://localhost:11435 in .env
 ```
 The evidence is pre-captured in [`datasets/`](../datasets) (including
 [`poisoned.log`](../datasets/poisoned.log)), so this path needs no attacker replay.
@@ -114,8 +115,8 @@ adversarial catch is the graded core.
   `http://10.50.142.235:11434`; offline students use `:11435`); saving the report
   outside `submissions/` (the grader defaults to newest there). The AI tools run
   directly against the model, so there is no web server to quote JSON against.
-- **Path-agnostic:** every worksheet task has both a cyberlab and an offline command;
-  students on either path reach the same findings.
+- **One path:** the worksheet runs against the shared boxes over the VPN; the offline
+  fallback is only for practicing without VPN.
 
 ---
 
